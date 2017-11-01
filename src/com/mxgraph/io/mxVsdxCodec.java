@@ -42,7 +42,6 @@ import com.mxgraph.io.vsdx.VsdxShape;
 import com.mxgraph.io.vsdx.mxPathDebug;
 import com.mxgraph.io.vsdx.mxVsdxConnect;
 import com.mxgraph.io.vsdx.mxVsdxConstants;
-import com.mxgraph.io.vsdx.mxVsdxGeometry;
 import com.mxgraph.io.vsdx.mxVsdxGeometryList;
 import com.mxgraph.io.vsdx.mxVsdxMaster;
 import com.mxgraph.io.vsdx.mxVsdxModel;
@@ -68,6 +67,13 @@ import com.mxgraph.view.mxGraphHeadless;
  */
 public class mxVsdxCodec
 {
+	protected String RESPONSE_END = "</mxfile>";
+
+	protected String RESPONSE_DIAGRAM_START = "";
+	protected String RESPONSE_DIAGRAM_END = "</diagram>";
+
+	protected String RESPONSE_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><mxfile>";
+
 	/**
 	 * Stores the vertexes imported.
 	 */
@@ -97,6 +103,8 @@ public class mxVsdxCodec
 	 * Do not remove, ask David
 	 */
 	public static String vsdxPlaceholder = new String(Base64.decodeBase64("dmlzaW8="));
+
+	protected mxVsdxModel vsdxModel;
 	
 	public mxVsdxCodec()
 	{
@@ -160,7 +168,23 @@ public class mxVsdxCodec
 					String str = out.toString(charset);
 					if (!str.isEmpty())
 					{
+						//UTF-8 BOM causes exception while parsing, so remove it
+						//TODO is the text encoding will be correct or string must be re-read as UTF-8?
+						if (str.startsWith("\u00ef\u00bb\u00bf")) str = str.substring(3);
+						
 						Document doc = mxXmlUtils.parseXml(str);
+						
+						if (doc == null) //An exception that is most probably due to encoding issues
+						{
+							byte[] outBytes = out.toByteArray();
+							if (outBytes[1] == 0 && outBytes[3] == 0 && outBytes[5] == 0) //UTF-16 Little Endian (has a null every other character) [Heuristic]
+							{
+								str = out.toString("UTF-16LE");
+								doc = mxXmlUtils.parseXml(str);
+							}
+							//TODO add any other non-standard encoding that may be needed 
+						}
+						
 						// Hack to be able to find the filename from an element in the XML
 						doc.setDocumentURI(filename);
 						docData.put(filename, doc);
@@ -260,12 +284,12 @@ public class mxVsdxCodec
 			return null;
 		}
 
-		mxVsdxModel vsdxModel = new mxVsdxModel(rootDoc, docData, mediaData);
+		vsdxModel = new mxVsdxModel(rootDoc, docData, mediaData);
 
 		//Imports each page of the document.
 		Map<Integer, mxVsdxPage> pages = vsdxModel.getPages();
 
-		StringBuilder xmlBuilder = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?><mxfile>");
+		StringBuilder xmlBuilder = new StringBuilder(RESPONSE_HEADER);
 
 		for (Map.Entry<Integer, mxVsdxPage> entry : pages.entrySet())
 		{
@@ -273,15 +297,7 @@ public class mxVsdxCodec
 			
 			if (!page.isBackground())
 			{
-				mxGraph graph = new mxGraphHeadless();
-				//Disable parent (groups) auto extend feature as it miss with the coordinates of vsdx format
-				graph.setExtendParents(false);
-				graph.setExtendParentsOnAdd(false);
-				
-				graph.setConstrainChildren(false);
-				graph.setHtmlLabels(true);
-				//Prevent change of edge parent as it misses with the routing points
-				((mxGraphModel)graph.getModel()).setMaintainEdgeParent(false);
+				mxGraph graph = createMxGraph();
 				
 				graph.getModel().beginUpdate();
 				importPage(page, graph, graph.getDefaultParent());
@@ -333,27 +349,54 @@ public class mxVsdxCodec
 				}
 				
 				graph.getModel().endUpdate();
-
-				mxCodec codec = new mxCodec();
-				Node node = codec.encode(graph.getModel());
-				((Element) node).setAttribute("style", "default-style2");
-				String pageName = StringEscapeUtils.escapeXml11(page.getPageName());
-				xmlBuilder.append("<diagram name=\"" + pageName + "\">");
-				String modelString = mxXmlUtils.getXml(node);
-				String modelAscii = Utils.encodeURIComponent(modelString, Utils.CHARSET_FOR_URL_ENCODING);
-				byte[] modelBytes= Utils.deflate(modelAscii);
-				String output = mxBase64.encodeToString(modelBytes, false);
 				
-				xmlBuilder.append(output);
-				xmlBuilder.append("</diagram>");
+				xmlBuilder.append(RESPONSE_DIAGRAM_START);
+				xmlBuilder.append(processPage(graph, page));
+				xmlBuilder.append(RESPONSE_DIAGRAM_END);
 			}
 		}
 
-		xmlBuilder.append("</mxfile>");
+		xmlBuilder.append(RESPONSE_END);
 		
 		return xmlBuilder.toString();
 	}
 
+	protected mxGraph createMxGraph() {
+		mxGraph graph = new mxGraphHeadless();
+		//Disable parent (groups) auto extend feature as it miss with the coordinates of vsdx format
+		graph.setExtendParents(false);
+		graph.setExtendParentsOnAdd(false);
+		
+		graph.setConstrainChildren(false);
+		graph.setHtmlLabels(true);
+		//Prevent change of edge parent as it misses with the routing points
+		((mxGraphModel)graph.getModel()).setMaintainEdgeParent(false);
+		return graph;
+	}
+
+	protected String processPage(mxGraph graph, mxVsdxPage page) throws IOException
+	{
+		mxCodec codec = new mxCodec();
+		Node node = codec.encode(graph.getModel());
+		((Element) node).setAttribute("style", "default-style2");
+		String modelString = mxXmlUtils.getXml(node);
+		String modelAscii = Utils.encodeURIComponent(modelString, Utils.CHARSET_FOR_URL_ENCODING);
+		byte[] modelBytes= Utils.deflate(modelAscii);
+		
+		StringBuilder output = new StringBuilder();
+		
+		if (page != null)
+		{
+			String pageName = StringEscapeUtils.escapeXml11(page.getPageName());
+			output.append("<diagram name=\""); 
+			output.append(pageName);
+			output.append("\">");
+		}
+		output.append(mxBase64.encodeToString(modelBytes, false));
+		
+		return  output.toString();
+	}
+	
 	private boolean isJpg(byte[] emfData, int i) 
 	{
 		//the loop calling this function make sure that we still have 3 bytes in the buffer
@@ -574,7 +617,7 @@ public class mxVsdxCodec
 	 * @param parentHeight Height of the parent cell.
 	 * @return the new vertex added. null if 'shape' is not a vertex.
 	 */
-	private mxCell addShape(mxGraph graph, VsdxShape shape, Object parent, Integer pageId, double parentHeight)
+	protected mxCell addShape(mxGraph graph, VsdxShape shape, Object parent, Integer pageId, double parentHeight)
 	{
 		shape.parentHeight = parentHeight;
 
@@ -670,13 +713,15 @@ public class mxVsdxCodec
 		if (subLabel)
 		{
 			group = (mxCell) graph.insertVertex(parent, null, null,
-					o.getX(), o.getY(), d.getX(), d.getY(), style);
+				Math.round(o.getX() * 100) / 100, Math.round(o.getY() * 100) / 100,
+				Math.round(d.getX() * 100) / 100, Math.round(d.getY() * 100) / 100, style);
 		}
 		else
 		{
 			String textLabel = shape.getTextLabel();
 			group = (mxCell) graph.insertVertex(parent, null, textLabel,
-					o.getX(), o.getY(), d.getX(), d.getY(), style);
+				Math.round(o.getX() * 100) / 100, Math.round(o.getY() * 100) / 100,
+				Math.round(d.getX() * 100) / 100, Math.round(d.getY() * 100) / 100, style);
 		}
 
 		Iterator<Map.Entry<Integer, VsdxShape>> entries = children.entrySet()
@@ -757,26 +802,26 @@ public class mxVsdxCodec
 			for (int i = 0; i < group.getChildCount(); i++)
 			{
 				mxICell child = group.getChildAt(i);
-				rotatedPoint(child.getGeometry(), rotation, hw, hh);				
+				Utils.rotatedGeometry(child.getGeometry(), rotation, hw, hh);				
 			}
 		}
 		return group;
 	}
 
-	public static void rotatedPoint(mxGeometry geo, double rotation,
+	public static void rotatedEdgePoint(mxPoint pt, double rotation,
 			double cx, double cy)
 	{
 		rotation = Math.toRadians(rotation);
 		double cos = Math.cos(rotation), sin = Math.sin(rotation);
 
-		double x = geo.getCenterX() - cx;
-		double y = geo.getCenterY() - cy;
+		double x = pt.getX() - cx;
+		double y = pt.getY() - cy;
 
 		double x1 = x * cos - y * sin;
 		double y1 = y * cos + x * sin;
 
-		geo.setX(Math.round(x1 + cx - geo.getWidth() / 2));
-		geo.setY(Math.round(y1 + cy - geo.getHeight() / 2));
+		pt.setX(Math.round(x1 + cx));
+		pt.setY(Math.round(y1 + cy));
 	}
 
 	/**
@@ -840,14 +885,14 @@ public class mxVsdxCodec
 			if (hasSubLabel)
 			{
 				v1 = (mxCell) graph.insertVertex(parent, null, null,
-						coordinates.getX(), coordinates.getY(), dimensions.getX(),
-						dimensions.getY(), style);
+					Math.round(coordinates.getX() * 100) / 100, Math.round(coordinates.getY() * 100) / 100,
+					Math.round(dimensions.getX() * 100) / 100, Math.round(dimensions.getY() * 100) / 100, style);
 			}
 			else
 			{
 				v1 = (mxCell) graph.insertVertex(parent, null, textLabel,
-						coordinates.getX(), coordinates.getY(), dimensions.getX(),
-						dimensions.getY(), style);
+					Math.round(coordinates.getX() * 100) / 100, Math.round(coordinates.getY() * 100) / 100,
+					Math.round(dimensions.getX() * 100) / 100, Math.round(dimensions.getY() * 100) / 100, style);
 			}
 
 			vertexMap.put(new ShapePageId(pageId, shape.getId()), v1);
@@ -897,11 +942,11 @@ public class mxVsdxCodec
 
 		//Get beginXY and endXY coordinates.
 		mxPoint beginXY = edgeShape.getStartXY(parentHeight);
-		mxPoint origBeginXY = new mxPoint(beginXY);
-		
-		beginXY = calculateAbsolutePoint(parent, graph, beginXY);
+		mxPoint endXY = edgeShape.getEndXY(parentHeight);
+		List<mxPoint> points = edgeShape.getRoutingPoints(parentHeight, beginXY, edgeShape.getRotation());
 
-		mxPoint fromConstraint = null;
+		rotateChildEdge(graph.getModel(), parent, beginXY, endXY, points);
+
 		Integer sourceSheet = connect.getSourceToSheet();
 
 		mxCell source = sourceSheet != null ? vertexMap
@@ -911,15 +956,11 @@ public class mxVsdxCodec
 		{
 			// Source is dangling
 			source = (mxCell) graph.insertVertex(parent, null, null,
-					beginXY.getX(), beginXY.getY(), 0, 0);
-			fromConstraint = new mxPoint(0, 0);
+				Math.round(beginXY.getX() * 100) / 100,
+				Math.round(beginXY.getY() * 100) / 100, 0, 0);
 		}
 		//Else: Routing points will contain the exit/entry points, so no need to set the to/from constraint 
 
-		mxPoint endXY = edgeShape.getEndXY(parentHeight);
-		endXY = calculateAbsolutePoint(parent, graph, endXY);
-		
-		mxPoint toConstraint = null;
 		Integer toSheet = connect.getTargetToSheet();
 
 		mxCell target = toSheet != null ? vertexMap.get(new ShapePageId(
@@ -929,8 +970,8 @@ public class mxVsdxCodec
 		{
 			// Target is dangling
 			target = (mxCell) graph.insertVertex(parent, null, null,
-					endXY.getX(), endXY.getY(), 0, 0);
-			toConstraint = new mxPoint(0, 0);
+				Math.round(endXY.getX() * 100) / 100,
+				Math.round(endXY.getY() * 100) / 100, 0, 0);
 		}
 		//Else: Routing points will contain the exit/entry points, so no need to set the to/from constraint 
 
@@ -939,7 +980,6 @@ public class mxVsdxCodec
 				.getStyleFromEdgeShape(parentHeight);
 		//Insert new edge and set constraints.
 		Object edge;
-		List<mxPoint> points = edgeShape.getRoutingPoints(parentHeight, origBeginXY, edgeShape.getRotation());
 		double rotation = edgeShape.getRotation();
 		if (rotation != 0)
 		{
@@ -970,17 +1010,6 @@ public class mxVsdxCodec
 		mxGeometry edgeGeometry = graph.getModel().getGeometry(edge);
 		edgeGeometry.setPoints(points);
 
-		if (fromConstraint != null)
-		{
-			graph.setConnectionConstraint(edge, source, true,
-					new mxConnectionConstraint(fromConstraint, false));
-		}
-		if (toConstraint != null)
-		{
-			graph.setConnectionConstraint(edge, target, false,
-					new mxConnectionConstraint(toConstraint, false));
-		}
-
 		//Gets and sets routing points of the edge.
 		if (styleMap.containsKey("curved")
 				&& styleMap.get("curved").equals("1"))
@@ -992,24 +1021,6 @@ public class mxVsdxCodec
 		}
 		
 		return edgeId;
-	}
-
-	/**
-	 * Find the top parent in a group
-	 * 
-	 * @param cell
-	 * @return the top most parent (which has the defaultParent as its parent)
-	 */
-	private mxCell findTopParent(mxCell cell, mxCell defaultParent)
-	{
-		mxCell parent = (mxCell) cell.getParent();
-		
-		while (parent.getParent() != null && parent.getParent() != defaultParent)
-		{
-			parent = (mxCell) parent.getParent();
-		}
-
-		return parent;
 	}
 
 	/**
@@ -1083,6 +1094,9 @@ public class mxVsdxCodec
 			mxPoint lblOffset = edgeShape.getLblEdgeOffset(graph.getView(), points);
 			((mxCell)edge).getGeometry().setOffset(lblOffset);
 		}
+		
+		rotateChildEdge(graph.getModel(), parent, beginXY, endXY, points);
+		
 		mxGeometry edgeGeometry = graph.getModel().getGeometry(edge);
 		edgeGeometry.setPoints(points);
 		
@@ -1102,11 +1116,41 @@ public class mxVsdxCodec
 		return edge;
 	}
 
+	protected void rotateChildEdge(mxIGraphModel model, Object parent, mxPoint beginXY, mxPoint endXY, List<mxPoint> points) {
+		//Rotate all points based on parent rotation
+		//Must get parent rotation and apply it similar to what we did in group rotation of all children
+		if (parent != null)
+		{
+			mxGeometry pgeo = model.getGeometry(parent);
+			String pStyle = model.getStyle(parent);
+			
+			if (pgeo != null && pStyle != null) 
+			{
+				int pos = pStyle.indexOf("rotation=");
+				
+				if (pos > -1)
+				{
+					double pRotation = Double.parseDouble(pStyle.substring(pos + 9, pStyle.indexOf(';', pos))); //9 is the length of "rotation="
+	
+					double hw = pgeo.getWidth() / 2, hh = pgeo.getHeight() / 2;
+					
+					rotatedEdgePoint(beginXY, pRotation, hw, hh);
+					rotatedEdgePoint(endXY, pRotation, hw, hh);
+					
+					for (mxPoint p : points) 
+					{
+						rotatedEdgePoint(p, pRotation, hw, hh);
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Post processes groups to remove leaf vertices that render nothing
 	 * @param group
 	 */
-	private void sanitiseGraph(mxGraph graph)
+	protected void sanitiseGraph(mxGraph graph)
 	{
 		Object root = graph.getModel().getRoot();
 		sanitiseCell(graph, root);

@@ -12,7 +12,7 @@
 	/**
 	 * Used in the GraphViewer lightbox.
 	 */
-	Editor.closeImage = (mxClient.IS_SVG) ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAMAAADzN3VRAAAApVBMVEUAAAD////k5OT///8AAAB1dXXMzMz9/f39/f37+/v5+fn+/v7///9iYmJaWlqFhYWnp6ejo6OHh4f////////////////7+/v5+fnx8fH///8AAAD///8bGxv7+/v5+fkoKCghISFDQ0MYGBjh4eHY2Njb29tQUFBvb29HR0c/Pz82NjYrKyu/v78SEhLu7u7s7OzV1dVVVVU7OzsVFRXAv78QEBBzqehMAAAAG3RSTlMAA/7p/vz5xZlrTiPL/v78+/v7+OXd2TYQDs8L70ZbAAABKUlEQVQoz3VS13LCMBBUXHChd8iukDslQChJ/v/TchaG4cXS+OSb1c7trU7V60OpdRz2ZtNZL4zXNlcN8BEtSG6+NxIXkeRPoBuQ1cjvZ31/VJFB10ISli6diYfH8iYO3WUNCcNlB0gTrXOtkxTo0O1aKKiBBMhhv2MNBQKoiA5wxlZo0JDzD3AYKbWacyj3fs01wxey0pyEP+R8pWKWXoqtIZ0DDg5pbki9krEKOa6LVDQsdoXEsi46Zqh69KFz7B1u7Hb2yDV8firXDKBlZ4UFiswKGRhXTS93/ECK7yxnJ3+S3y/ThpO+cfSD017nqa18aasabU0/t7d+tk0/1oMEJ1NaD67iwdF68OabFSLn+eHb0+vjy+uk8br9fdrftH0O2menfd7+AQfYM/lNjoDHAAAAAElFTkSuQmCC' : IMAGE_PATH + '/delete.png';
+	Editor.closeImage = (!mxClient.IS_SVG) ? IMAGE_PATH + '/delete.png' : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAMAAADzN3VRAAAApVBMVEUAAAD////k5OT///8AAAB1dXXMzMz9/f39/f37+/v5+fn+/v7///9iYmJaWlqFhYWnp6ejo6OHh4f////////////////7+/v5+fnx8fH///8AAAD///8bGxv7+/v5+fkoKCghISFDQ0MYGBjh4eHY2Njb29tQUFBvb29HR0c/Pz82NjYrKyu/v78SEhLu7u7s7OzV1dVVVVU7OzsVFRXAv78QEBBzqehMAAAAG3RSTlMAA/7p/vz5xZlrTiPL/v78+/v7+OXd2TYQDs8L70ZbAAABKUlEQVQoz3VS13LCMBBUXHChd8iukDslQChJ/v/TchaG4cXS+OSb1c7trU7V60OpdRz2ZtNZL4zXNlcN8BEtSG6+NxIXkeRPoBuQ1cjvZ31/VJFB10ISli6diYfH8iYO3WUNCcNlB0gTrXOtkxTo0O1aKKiBBMhhv2MNBQKoiA5wxlZo0JDzD3AYKbWacyj3fs01wxey0pyEP+R8pWKWXoqtIZ0DDg5pbki9krEKOa6LVDQsdoXEsi46Zqh69KFz7B1u7Hb2yDV8firXDKBlZ4UFiswKGRhXTS93/ECK7yxnJ3+S3y/ThpO+cfSD017nqa18aasabU0/t7d+tk0/1oMEJ1NaD67iwdF68OabFSLn+eHb0+vjy+uk8br9fdrftH0O2menfd7+AQfYM/lNjoDHAAAAAElFTkSuQmCC';
 
 	/**
 	 * 
@@ -27,20 +27,40 @@
 	/**
 	 * Used in the GraphViewer lightbox.
 	 */
-	Editor.tweetImage = (mxClient.IS_SVG) ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAARlJREFUeNpi/P//PwM1ABMDlQDVDGKAeo0biMXwKOMD4ilA/AiInwDxfCBWBeIgINYDmwE1yB2Ir0Alsbl6JchONPwNiC8CsTPIDJjXuIBYG4gPAnE8EDMjGaQCxGFYLOAEYlYg/o3sNSkgfo1k2ykgLgRiIyAOwOIaGE6CmwE1SA6IZ0BNR1f8GY9BXugG2UMN+YtHEzr+Aw0OFINYgHgdCYaA8HUgZkM3CASEoYb9ItKgapQkhGQQKC0dJdKQx1CLsRoEArpAvAuI3+Ix5B8Q+2AkaiyZVgGId+MwBBQhKVhzB9QgKyDuAOJ90BSLzZBzQOyCK5uxQNnXoGlJHogfIOU7UCI9C8SbgHgjEP/ElRkZB115BBBgAPbkvQ/azcC0AAAAAElFTkSuQmCC' : IMAGE_PATH + '/tweet.png';
+	Editor.tweetImage = IMAGE_PATH + '/tweet.png';
 
 	/**
 	 * Used in the GraphViewer lightbox.
 	 */
-	Editor.facebookImage = (mxClient.IS_SVG) ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAARVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADc6ur3AAAAFnRSTlMAYmRg2KVCC/oPq0uAcVQtHtvZuoYh/a7JUAAAAGJJREFUGNOlzkkOgCAMQNEvagvigBP3P6pRNoCJG/+myVu0RdsqxcQqQ/NFVkKQgqwDzoJ2WKajoB66atcAa0GjX0D8lJHwNGfknYJzY77LDtDZ+L74j0z26pZI2yYlMN9TL17xEd+fl1D+AAAAAElFTkSuQmCC' : IMAGE_PATH + '/facebook.png';
+	Editor.facebookImage = IMAGE_PATH + '/facebook.png';
 
 	/**
 	 * Blank 1x1 pixel transparent PNG image.
 	 */
 	Editor.blankImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
+
+	/**
+	 * Blank 1x1 pixel transparent PNG image.
+	 */
+	Editor.hiResImage = (mxClient.IS_SVG) ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA+CAMAAACLMWy1AAAAh1BMVEUAAABMTExERERBQUFBQUFFRUVAQEBCQkJAQEA6OjpDQ0NKSkpBQUFBQUFERERERERBQUFCQkJCQkJCQkJJSUlBQUFCQkJDQ0NDQ0NCQkJDQ0NBQUFBQUFCQkJBQUFCQkJCQkJDQ0NCQkJHR0dBQUFCQkJCQkJAQEBCQkJDQ0NAQEBERERCQkIk1hS2AAAAKnRSTlMAAjj96BL7PgQFRwfu3TYazKuVjRXl1V1DPCn1uLGjnWNVIgy9hU40eGqPkM38AAACG0lEQVRYw+2X63KbMBCFzwZblgGDceN74muatpLe//m6MHV3gHGFAv2RjM94MAbxzdnVsQbBDKwH8AH8MDAyafzjqYeyOG04XE7RS8nIRDXg6BlT+rA0nmtAPh+NQRDxIASIMG44rAMrGunBgHwy3uUldxggIStGKp2f+DQc2O4h4eQsX3O2IFB/oEbsjOKbStnjAEA+zJ0ylZTbgvoDn8xNyn6Dbj5Kd4GsNpABa6duQPfSdEj88TgMAhKuCWjAkgmFXPLnsD0pWd3OFGdrMugQII/eOMPEiGOzqPMIeWrcSoMCg71W1pXBPvCP+gS/OdXqQ3uW23+93XGWLl/OaBb805bNcBPoEIcVJsnHzcxpZH86u5KZ9gDby5dQCcnKqdbke4ItI4Tzd7IW9hZQt4EO6GG9b9sYuuK9Wwn8TIr2xKbF2+3Nhr+qxChJ/AI6pIfCu4z4Zowp4ZUNihz79vewzctnHDwTvQO/hCdFBzrUGDOPn2Y/F8YKT4oOATLvlhOznzmBSdFBJWtc58y7r+UVFOCQczy3wpN6pegDqHtsCPTGvH9JuTO0Dyg8icldYPk+RB6g8Aofj4m2EKBvtTmUPD9xDd1pPcSReV2U5iD/ik2yrngtvvqBfPzOvKiDTKTsCdoHZJ7pLLffgTwlJ5vJdtJV2/jiAYaLvLGhMAEDO5QcDg2M/jOw/8Zn+K3ZwJvHT7ZffgC/NvA3zcybTeIfE4EAAAAASUVORK5CYII=' : IMAGE_PATH + '/img-hi-res.png';
+
+	/**
+	 * Blank 1x1 pixel transparent PNG image.
+	 */
+	Editor.loResImage = (mxClient.IS_SVG) ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA+CAMAAACLMWy1AAAAS1BMVEVAQEAAAAA1NTVBQUFDQ0NDQ0NFRUVERERBQUFBQUFBQUFAQEBBQUFBQUFCQkJCQkJCQkJBQUFCQkJDQ0NDQ0NCQkJCQkJCQkJGRkb5/XqTAAAAGXRSTlP+AAWODlASCsesX+Lc2LyWe3pwa1tCPjohjSJfoAAAAI1JREFUWMPt1MkKhTAMRuG0anvneXr/J71nUypKcdqI/N8yhLMKMZE1CahnClDQzMPB44ED3EgeCubgDWnWQMHpwTtKwTe+UHD4sJ94wbUEHHFGhILlYDeSnsQeabeCgsPBgB0MOZZ9oGA5GJFiJSfUULAfjLjARrhCwX7wh2YCDwVbwZkUBKqFFJRN+wOcwSgR2sREcgAAAABJRU5ErkJggg==' : IMAGE_PATH + '/img-lo-res.png';
+
+	/**
+	 * Only needed in browsers with SVG support for export via lightbox toolbar. 
+	 */
+	Editor.cameraLargeImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAA/BJREFUWAnFl0uIjWEYx885buPSuGwmSYwtwsY1ikKSNYNclmQnadgrZSPlsnBLSlaGBdNYKY0Vdi4L4zYzIqxGxmXG//d+7//0+uY7nWMiT/2/53mf+3v7vnNKpf9M5UbrDw8Pj4m+wzmeT1FBUS6Xf+YNox6reMONukijMXUTM3NmI75PyXcJPwRWg5kS7xysDLNmfEUxpx2rceNE50IlYjyRklcLf0prY+x4BTqfmx3ZUHQaO9ISGngYq38V/1EH+ECPa+QaK1u1kVBQirDMChiS3CTeIkwWvghtwhKBpZ8g1CO2B99FynVU/KowSRgQ3mlrBsVZ1awmQlS0SGbfXglfBPbdRGMm5O8RXg2P835pDCvzWjghTHETcLpZLHwS8kTCtBEK1SN83Egam8YxyVZqc+Do5qkwS+gT9grNwkUBG6cbsG/gs3BTuC/0ChCxq4QtwgzBMdwUZBPyN4Ftfi4sYPZHktbOSRlIuutRP5jYj0ueZp88xyYcS/zZoiLyQT1IA/cTj7eSlwnrhI+JnkQbCwo2Sx/2M7VJt17wdhVtgxvrpoFnAuSAbJQ97biZAlKxBfD9wgOhV+BgIR/AZtJ4kwD5PGSj7OmmekjWEy0oAQHAS3+KpBpzXqYK3UItopHpSRMno2N+cm7gDYnfRCcr3QBqriMHLJDkeyhFfiG5aVbK+8rhtP9M6QcIEJHX5Fp9NMAyQlYiu+OOJNlODCIXyka/P23bncTdiC7OydC1+v1Bsb+5r84DK8S3Rdmf5cRUFW3bXtWUSt1Rdk6G4SyJV2o1YId+vNUxr+x5yCJiapFtcxQzLjrxboGcMxvFJwEOKnLwjIbkx/sdSmeSaUY++SwTAxV+4DJT7RVwkbk46gNCsifIItuy0e9PF33Cb4homhN5YRyzL5q5V2VNkv98kqgoGTo3YF9CnMM5Y5rItFfvBSi9JulVXOgI+VwIntkt+SaZ6weQfcovJf7zpTfl86P/wAF7Fz18NeKwmvAWCaX0Z/uMHQr42ZxvR/Rxcw5xM+9J/CJq8w2gduDhmDgso/QrBH47dEXQ1IqczyHpIOfIRtnTtV7SwO1oKXKkU3fbToFGSDHtMWcaH1WBuVYnDbRFi99iqSMySdzxXckrazUh23KBVYGIcfNBkTxca0e4ATJ0KukGYVBgr/MnlhPOtQq/ksUfCbzh+EFCjtnCUoHfjhA/OsiTv2HcEvJMELp0VakZDliTmriTdPivxU4VmEhtPrGV+KJhO7ZKt0doFZh1fgZSBWIW2AGEHwg3BUWOnKtH+suqdw07tYMfglCrWPD5mw9qVYuniaXkT0OtWaSuo5LJTY1RBf+roF9X5+y/5qU+DAAAAABJRU5ErkJggg==';
 	
 	/**
-	 * Contains the default XML for an empty diagram.
+	 * Default value for custom libraries in mxSettings.
+	 */
+	Editor.defaultCustomLibraries = [];
+
+	/**
+	 * Default value for the CSV import dialog.
 	 */
 	Editor.defaultCsvValue = '##\n' +
 		'## Example CSV import. Use ## for comments and # for configuration. Paste CSV below.\n' +
@@ -57,6 +77,11 @@
 		'## Default is the current style for nodes.\n' +
 		'#\n' +
 		'# style: label;image=%image%;whiteSpace=wrap;html=1;rounded=1;fillColor=%fill%;strokeColor=%stroke%;\n' +
+		'#\n' +
+		'## Uses the given column name as the identity for cells (updates existing cells).\n' +
+		'## Default is no identity (empty value or -).\n' +
+		'#\n' +
+		'# identity: -\n' +
 		'#\n' +
 		'## Connections between rows ("from": source colum, "to": target column).\n' +
 		'## Label, style and invert are optional. Defaults are \'\', current style and false.\n' +
@@ -77,7 +102,7 @@
 		'#\n' +
 		'## Padding for autosize. Default is 0.\n' +
 		'#\n' +
-		'# padding: -26\n' +
+		'# padding: -12\n' +
 		'#\n' +
 		'## Comma-separated list of ignored columns for metadata. (These can be\n' +
 		'## used for connections and styles but will not be added as metadata.)\n' +
@@ -107,20 +132,113 @@
 		'Edward Morrison,Brand Manager,emo,Office 2,Evan Miller,me@example.com,#d5e8d4,#82b366,,https://www.draw.io,https://cdn3.iconfinder.com/data/icons/user-avatars-1/512/users-10-3-128.png\n' +
 		'Ron Donovan,System Admin,rdo,Office 3,Evan Miller,me@example.com,#d5e8d4,#82b366,"emo,tva",https://www.draw.io,https://cdn3.iconfinder.com/data/icons/user-avatars-1/512/users-2-128.png\n' +
 		'Tessa Valet,HR Director,tva,Office 4,Evan Miller,me@example.com,#d5e8d4,#82b366,,https://www.draw.io,https://cdn3.iconfinder.com/data/icons/user-avatars-1/512/users-3-128.png\n';
+	
+	/**
+	 * Global configuration of the Editor
+	 * see https://desk.draw.io/solution/articles/16000058316
+	 * 
+	 * For defaultVertexStyle, defaultEdgeStyle and defaultLibraries, this must be called before
+	 * mxSettings.load via global config variable window.mxLoadSettings = false.
+	 */
+	Editor.configure = function(config)
+	{
+		if (config != null)
+		{
+			Menus.prototype.defaultFonts = config.defaultFonts || Menus.prototype.defaultFonts;
+			ColorDialog.prototype.presetColors = config.presetColors || ColorDialog.prototype.presetColors;
+			ColorDialog.prototype.defaultColors = config.defaultColors || ColorDialog.prototype.defaultColors;
+			StyleFormatPanel.prototype.defaultColorSchemes = config.defaultColorSchemes || StyleFormatPanel.prototype.defaultColorSchemes;
+			Graph.prototype.defaultEdgeLength = config.defaultEdgeLength || Graph.prototype.defaultEdgeLength;
+			
+			// Custom CSS injected directly into the page
+			if (config.css != null)
+			{
+				var s = document.createElement('style');
+				s.setAttribute('type', 'text/css');
+				s.appendChild(document.createTextNode(config.css));
+				
+				var t = document.getElementsByTagName('script')[0];
+			  	t.parentNode.insertBefore(s, t);
+			}
+			
+			// Overrides default libraries
+			if (config.defaultLibraries != null)
+			{
+				Sidebar.prototype.defaultEntries = config.defaultLibraries;
+			}
+			
+			// Overrides default custom libraries
+			if (config.defaultCustomLibraries != null)
+			{
+				Editor.defaultCustomLibraries = config.defaultCustomLibraries;
+			}
+			
+			// Overrides default vertex style
+			if (config.defaultVertexStyle != null)
+			{
+				Graph.prototype.defaultVertexStyle = config.defaultVertexStyle;
+			}
+
+			// Overrides default edge style
+			if (config.defaultEdgeStyle != null)
+			{
+				Graph.prototype.defaultEdgeStyle = config.defaultEdgeStyle;
+			}
+			
+			if (config.emptyDiagramXml)
+			{
+				EditorUi.prototype.emptyDiagramXml = config.emptyDiagramXml;
+			}
+			
+			if (config.thumbWidth)
+			{
+				Sidebar.prototype.thumbWidth = config.thumbWidth;
+			}
+			
+			if (config.thumbHeight)
+			{
+				Sidebar.prototype.thumbHeight = config.thumbHeight;
+			}
+			
+			if (config.emptyLibraryXml)
+			{
+				EditorUi.prototype.emptyLibraryXml = config.emptyLibraryXml;
+			}
+			
+			if (config.sidebarWidth)
+			{
+				EditorUi.prototype.hsplitPosition = config.sidebarWidth;
+			}
+			
+			if (config.fontCss)
+			{
+				var s = document.createElement('style');
+				s.setAttribute('type', 'text/css');
+				s.appendChild(document.createTextNode(config.fontCss));
+				
+				var t = document.getElementsByTagName('script')[0];
+			  	t.parentNode.insertBefore(s, t);
+			  	
+			  	Editor.prototype.fontCss = config.fontCss;
+			}
+			
+			if (config.plugins != null)
+			{
+				// Required for callback
+				App.initPluginCallback();
+				
+				for (var i = 0; i < config.plugins.length; i++)
+				{
+					mxscript(config.plugins[i]);
+				}
+			}
+		}
+	};
 
 	/**
 	 * Executes the first step for connecting to Google Drive.
 	 */
 	Editor.prototype.editButtonLink = (urlParams['edit'] != null) ? decodeURIComponent(urlParams['edit']) : null;
-
-	/**
-	 * 
-	 */
-	if (urlParams['dev'] == '1')
-	{
-		Editor.prototype.editBlankUrl = Editor.prototype.editBlankUrl + '&dev=1';
-		Editor.prototype.editBlankFallbackUrl = Editor.prototype.editBlankFallbackUrl + '&dev=1';
-	}
 
 	/**
 	 * Adds support for old stylesheets and compressed files
@@ -488,6 +606,8 @@
 		
 		Editor.prototype.init = function()
 		{
+			editorInit.apply(this, arguments);
+			
 			this.graph.addListener(mxEvent.SIZE, mxUtils.bind(this, function(sender, evt)
 			{
 				if (this.graph.mathEnabled)
@@ -567,17 +687,15 @@
 		{
 			formatInit.apply(this, arguments);
 
-			var ui = this.editorUi;
-			ui.editor.addListener('fileLoaded', this.update);
+			this.editorUi.editor.addListener('fileLoaded', this.update);
 		};
 
 		var formatRefresh = Format.prototype.refresh;
 		
 		Format.prototype.refresh = function()
 		{
-			var ui = this.editorUi;
-			
-			if (ui.getCurrentFile() != null || urlParams['embed'] == '1')
+			if (this.editorUi.getCurrentFile() != null || urlParams['embed'] == '1' ||
+				this.editorUi.editor.chromeless)
 			{
 				formatRefresh.apply(this, arguments);
 			}
@@ -585,6 +703,48 @@
 			{
 				this.clear();
 			}
+		};
+		
+		/**
+		 * Add global shadow option.
+		 */
+		var diagramFormatPanelAddView = DiagramFormatPanel.prototype.addView;
+		
+		DiagramFormatPanel.prototype.addView = function(div)
+		{
+			var div = diagramFormatPanelAddView.apply(this, arguments);
+			
+			if (mxClient.IS_SVG)
+			{
+				var ui = this.editorUi;
+				var editor = ui.editor;
+				var graph = editor.graph;
+				
+				div.appendChild(this.createOption(mxResources.get('shadow'), function()
+				{
+					return graph.shadowVisible;
+				}, function(checked)
+				{
+					graph.setShadowVisible(!graph.shadowVisible);
+				},
+				{
+					install: function(apply)
+					{
+						this.listener = function()
+						{
+							apply(graph.shadowVisible);
+						};
+						
+						ui.addListener('shadowVisibleChanged', this.listener);
+					},
+					destroy: function()
+					{
+						ui.removeListener(this.listener);
+					}
+				}));
+			}
+			
+			return div;
 		};
 		
 		/**
@@ -634,11 +794,32 @@
 
 			return div;
 		};
+		
+		/**
+		 * Configures global color schemes.
+		 */
+		StyleFormatPanel.prototype.defaultColorSchemes = [[null, {fill: '#f5f5f5', stroke: '#666666'},
+			{fill: '#dae8fc', stroke: '#6c8ebf'}, {fill: '#d5e8d4', stroke: '#82b366'},
+			{fill: '#ffe6cc', stroke: '#d79b00'}, {fill: '#fff2cc', stroke: '#d6b656'},
+			{fill: '#f8cecc', stroke: '#b85450'}, {fill: '#e1d5e7', stroke: '#9673a6'}],
+		    [null,
+			{fill: '#f5f5f5', stroke: '#666666', gradient: '#b3b3b3'},
+			{fill: '#dae8fc', stroke: '#6c8ebf', gradient: '#7ea6e0'},
+			{fill: '#d5e8d4', stroke: '#82b366', gradient: '#97d077'},
+			{fill: '#ffcd28', stroke: '#d79b00', gradient: '#ffa500'},
+			{fill: '#fff2cc', stroke: '#d6b656', gradient: '#ffd966'},
+			{fill: '#f8cecc', stroke: '#b85450', gradient: '#ea6b66'},
+			{fill: '#e6d0de', stroke: '#996185', gradient: '#d5739d'}],
+			[null, {fill: '#eeeeee', stroke: '#36393d'},
+			{fill: '#f9f7ed', stroke: '#36393d'}, {fill: '#ffcc99', stroke: '#36393d'},
+			{fill: '#cce5ff', stroke: '#36393d'}, {fill: '#ffff88', stroke: '#36393d'},
+			{fill: '#cdeb8b', stroke: '#36393d'}, {fill: '#ffcccc', stroke: '#36393d'}]];
 
 		/**
 		 * Adds predefiend styles.
 		 */
-		var StyleFormatPanelInit = StyleFormatPanel.prototype.init;
+		var styleFormatPanelInit = StyleFormatPanel.prototype.init;
+		
 		StyleFormatPanel.prototype.init = function()
 		{
 			// TODO: Update sstate in Format
@@ -649,13 +830,14 @@
 				this.container.appendChild(this.addStyles(this.createPanel()));
 			}
 			
-			StyleFormatPanelInit.apply(this, arguments);
+			styleFormatPanelInit.apply(this, arguments);
 		};
 
 		/**
 		 * Overridden to add copy and paste style.
 		 */
 		var styleFormatPanelAddStyleOps = StyleFormatPanel.prototype.addStyleOps;
+		
 		StyleFormatPanel.prototype.addStyleOps = function(div)
 		{
 			var btn = mxUtils.button(mxResources.get('copyStyle'), mxUtils.bind(this, function(evt)
@@ -692,7 +874,7 @@
 		{
 			var graph = this.editorUi.editor.graph;
 			var picker = document.createElement('div');
-			picker.style.whiteSpace = 'normal';
+			picker.style.whiteSpace = 'nowrap';
 			picker.style.paddingLeft = '24px';
 			picker.style.paddingRight = '20px';
 			div.style.paddingLeft = '16px';
@@ -746,6 +928,7 @@
 						}
 					})
 	
+					btn.className = 'geStyleButton';
 					btn.style.width = '36px';
 					btn.style.height = '30px';
 					btn.style.margin = '0px 6px 6px 0px';
@@ -800,43 +983,30 @@
 				this.editorUi.currentScheme = 0;
 			}
 
-			var schemes = [[null, {fill: '#f5f5f5', stroke: '#666666'},
-				{fill: '#dae8fc', stroke: '#6c8ebf'}, {fill: '#d5e8d4', stroke: '#82b366'},
-				{fill: '#ffe6cc', stroke: '#d79b00'}, {fill: '#fff2cc', stroke: '#d6b656'},
-				{fill: '#f8cecc', stroke: '#b85450'}, {fill: '#e1d5e7', stroke: '#9673a6'}],
-			    [null,
-				{fill: '#f5f5f5', stroke: '#666666', gradient: '#b3b3b3'},
-				{fill: '#dae8fc', stroke: '#6c8ebf', gradient: '#7ea6e0'},
-				{fill: '#d5e8d4', stroke: '#82b366', gradient: '#97d077'},
-				{fill: '#ffcd28', stroke: '#d79b00', gradient: '#ffa500'},
-				{fill: '#fff2cc', stroke: '#d6b656', gradient: '#ffd966'},
-				{fill: '#f8cecc', stroke: '#b85450', gradient: '#ea6b66'},
-				{fill: '#e6d0de', stroke: '#996185', gradient: '#d5739d'}],
-				[null, {fill: '#eeeeee', stroke: '#36393d'},
-				{fill: '#f9f7ed', stroke: '#36393d'}, {fill: '#ffcc99', stroke: '#36393d'},
-				{fill: '#cce5ff', stroke: '#36393d'}, {fill: '#ffff88', stroke: '#36393d'},
-				{fill: '#cdeb8b', stroke: '#36393d'}, {fill: '#ffcccc', stroke: '#36393d'}]];
-			
 			var left = document.createElement('div');
 			left.style.cssText = 'position:absolute;left:10px;top:8px;bottom:8px;width:20px;margin:4px;opacity:0.5;' +
 				'background-repeat:no-repeat;background-position:center center;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQBAMAAADQT4M0AAAAIVBMVEUAAAB2dnZ4eHh3d3d1dXVxcXF2dnZ2dnZ2dnZxcXF2dnYmb3w1AAAACnRSTlMAfCTkhhvb7cQSPH2JPgAAADRJREFUCNdjwACMAmBKaiGYs2oJmLPKAZ3DabU8AMRTXpUKopislqFyVzCAuUZgikkBZjoAcMYLnp53P/UAAAAASUVORK5CYII=);';
-			div.appendChild(left);
 			
 			mxEvent.addListener(left, 'click', mxUtils.bind(this, function()
 			{
-				this.editorUi.currentScheme = mxUtils.mod(this.editorUi.currentScheme - 1, schemes.length);
-				updateScheme(schemes[this.editorUi.currentScheme]);
+				this.editorUi.currentScheme = mxUtils.mod(this.editorUi.currentScheme - 1, this.defaultColorSchemes.length);
+				updateScheme(this.defaultColorSchemes[this.editorUi.currentScheme]);
 			}));
 			
 			var right = document.createElement('div');
 			right.style.cssText = 'position:absolute;left:202px;top:8px;bottom:8px;width:20px;margin:4px;opacity:0.5;' +
 				'background-repeat:no-repeat;background-position:center center;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQBAMAAADQT4M0AAAAIVBMVEUAAAB2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnYBuwCcAAAACnRSTlMAfCTkhhvb7cQSPH2JPgAAADZJREFUCNdjQAOMAmBKaiGY8loF5rKswsZlrVo8AUiFrTICcbIWK8A5DF1gDoMymMPApIAwHwCS0Qx/U7qCBQAAAABJRU5ErkJggg==);';
-			div.appendChild(right);
+
+			if (this.defaultColorSchemes.length > 1)
+			{
+				div.appendChild(left);
+				div.appendChild(right);
+			}
 			
 			mxEvent.addListener(right, 'click', mxUtils.bind(this, function()
 			{
-				this.editorUi.currentScheme = mxUtils.mod(this.editorUi.currentScheme + 1, schemes.length);
-				updateScheme(schemes[this.editorUi.currentScheme]);
+				this.editorUi.currentScheme = mxUtils.mod(this.editorUi.currentScheme + 1, this.defaultColorSchemes.length);
+				updateScheme(this.defaultColorSchemes[this.editorUi.currentScheme]);
 			}));
 			
 			// Hover state
@@ -855,7 +1025,7 @@
 			addHoverState(left);
 			addHoverState(right);
 			
-			updateScheme(schemes[this.editorUi.currentScheme]);
+			updateScheme(this.defaultColorSchemes[this.editorUi.currentScheme]);
 			
 			return div;
 		};
@@ -1069,6 +1239,14 @@
 	};
 
 	/**
+	 * Adds support for page links.
+	 */
+	Graph.prototype.isPageLink = function(href)
+	{
+		return href != null && href.substring(0, 10) == 'data:page/';
+	};
+
+	/**
 	 * Adds a shadow filter to the given svg root.
 	 */
 	Graph.prototype.addSvgShadow = function(svgRoot, group, createOnly)
@@ -1219,6 +1397,7 @@
 	mxStencilRegistry.libraries['mockup'] = [SHAPES_PATH + '/mockup/mxMockupButtons.js'];
 	
 	mxStencilRegistry.libraries['arrows2'] = [SHAPES_PATH + '/mxArrows.js'];
+	mxStencilRegistry.libraries['atlassian'] = [STENCIL_PATH + '/atlassian.xml'];
 	mxStencilRegistry.libraries['bpmn'] = [SHAPES_PATH + '/bpmn/mxBpmnShape2.js', STENCIL_PATH + '/bpmn.xml'];
 	mxStencilRegistry.libraries['er'] = [SHAPES_PATH + '/er/mxER.js'];
 	mxStencilRegistry.libraries['ios'] = [SHAPES_PATH + '/mockup/mxMockupiOS.js'];
@@ -1293,5 +1472,579 @@
 		}
 		
 		return mxMarkerCreateMarker.apply(this, arguments);
+	};
+
+	/**
+	 * Constructs a new print dialog.
+	 */
+	PrintDialog.prototype.create = function(editorUi, titleText)
+	{
+		var graph = editorUi.editor.graph;
+		var div = document.createElement('div');
+		
+		var title = document.createElement('h3');
+		title.style.width = '100%';
+		title.style.textAlign = 'center';
+		title.style.marginTop = '0px';
+		mxUtils.write(title, titleText || mxResources.get('print'));
+		div.appendChild(title);
+		
+		var pageCount = 1;
+		var currentPage = 1;
+
+		// Pages
+		var pagesSection = document.createElement('div');
+		pagesSection.style.cssText = 'border-bottom:1px solid lightGray;padding-bottom:12px;margin-bottom:12px;';
+		
+		var allPagesRadio = document.createElement('input');
+		allPagesRadio.style.cssText = 'margin-right:8px;margin-bottom:8px;';
+		allPagesRadio.setAttribute('value', 'all');
+		allPagesRadio.setAttribute('type', 'radio');
+		allPagesRadio.setAttribute('name', 'pages-printdialog');
+		
+		pagesSection.appendChild(allPagesRadio);
+
+		var span = document.createElement('span');
+		mxUtils.write(span, mxResources.get('printAllPages'));
+		pagesSection.appendChild(span);
+
+		mxUtils.br(pagesSection);
+
+		// Pages ... to ...
+		var pagesRadio = allPagesRadio.cloneNode(true);
+		allPagesRadio.setAttribute('checked', 'checked');
+		pagesRadio.setAttribute('value', 'range');
+		pagesSection.appendChild(pagesRadio);
+		
+		var span = document.createElement('span');
+		mxUtils.write(span, mxResources.get('pages') + ':');
+		pagesSection.appendChild(span);
+		
+		var pagesFromInput = document.createElement('input');
+		pagesFromInput.style.cssText = 'margin:0 8px 0 8px;'
+		pagesFromInput.setAttribute('value', '1');
+		pagesFromInput.setAttribute('type', 'number');
+		pagesFromInput.setAttribute('min', '1');
+		pagesFromInput.style.width = '50px';
+		pagesSection.appendChild(pagesFromInput);
+		
+		var span = document.createElement('span');
+		mxUtils.write(span, mxResources.get('to'));
+		pagesSection.appendChild(span);
+		
+		var pagesToInput = pagesFromInput.cloneNode(true);
+		pagesSection.appendChild(pagesToInput);
+
+		mxEvent.addListener(pagesFromInput, 'focus', function()
+		{
+			pagesRadio.checked = true;
+		});
+		
+		mxEvent.addListener(pagesToInput, 'focus', function()
+		{
+			pagesRadio.checked = true;
+		});
+		
+		function validatePageRange()
+		{
+			pagesToInput.value = Math.max(1, Math.min(pageCount, Math.max(parseInt(pagesToInput.value), parseInt(pagesFromInput.value))));
+			pagesFromInput.value = Math.max(1, Math.min(pageCount, Math.min(parseInt(pagesToInput.value), parseInt(pagesFromInput.value))));
+		};
+		
+		mxEvent.addListener(pagesFromInput, 'change', validatePageRange);
+		mxEvent.addListener(pagesToInput, 'change', validatePageRange);
+		
+		if (editorUi.pages != null)
+		{
+			pageCount = editorUi.pages.length;
+
+			if (editorUi.currentPage != null)
+			{
+				for (var i = 0; i < editorUi.pages.length; i++)
+				{
+					if (editorUi.currentPage == editorUi.pages[i])
+					{
+						currentPage = i + 1;
+						pagesFromInput.value = currentPage;
+						pagesToInput.value = currentPage;
+						break;
+					}
+				}
+			}
+		}
+		
+		pagesFromInput.setAttribute('max', pageCount);
+		pagesToInput.setAttribute('max', pageCount);		
+		
+		if (pageCount > 1)
+		{
+			div.appendChild(pagesSection);
+		}
+		
+		// Adjust to ...
+		var adjustSection = document.createElement('div');
+		adjustSection.style.marginBottom = '10px';
+		
+		var adjustRadio = document.createElement('input');
+		adjustRadio.style.marginRight = '8px';
+		
+		adjustRadio.setAttribute('value', 'adjust');
+		adjustRadio.setAttribute('type', 'radio');
+		adjustRadio.setAttribute('name', 'printZoom');
+		adjustSection.appendChild(adjustRadio);
+
+		var span = document.createElement('span');
+		mxUtils.write(span, mxResources.get('adjustTo'));
+		adjustSection.appendChild(span);
+		
+		var zoomInput = document.createElement('input');
+		zoomInput.style.cssText = 'margin:0 8px 0 8px;';
+		zoomInput.setAttribute('value', '100 %');
+		zoomInput.style.width = '50px';
+		adjustSection.appendChild(zoomInput);
+		
+		mxEvent.addListener(zoomInput, 'focus', function()
+		{
+			adjustRadio.checked = true;
+		});
+		
+		div.appendChild(adjustSection);
+
+		// Fit to ...
+		var fitSection = pagesSection.cloneNode(false);
+
+		var fitRadio = adjustRadio.cloneNode(true);
+		fitRadio.setAttribute('value', 'fit');
+		adjustRadio.setAttribute('checked', 'checked');
+		
+		var spanFitRadio = document.createElement('div');
+		spanFitRadio.style.cssText = 'display:inline-block;height:100%;vertical-align:top;padding-top:2px;';
+		spanFitRadio.appendChild(fitRadio);
+		fitSection.appendChild(spanFitRadio);
+		
+		var table = document.createElement('table');
+		table.style.display = 'inline-block';
+		var tbody = document.createElement('tbody');
+		
+		var row1 = document.createElement('tr');
+		var row2 = row1.cloneNode(true);
+		
+		var td1 = document.createElement('td');
+		var td2 = td1.cloneNode(true);
+		var td3 = td1.cloneNode(true);
+		
+		var td4 = td1.cloneNode(true);
+		var td5 = td1.cloneNode(true);
+		var td6 = td1.cloneNode(true);
+		
+		td1.style.textAlign = 'right';
+		td4.style.textAlign = 'right';
+
+		mxUtils.write(td1, mxResources.get('fitTo'));
+		
+		var sheetsAcrossInput = document.createElement('input');
+		sheetsAcrossInput.style.cssText = 'margin:0 8px 0 8px;';
+		sheetsAcrossInput.setAttribute('value', '1');
+		sheetsAcrossInput.setAttribute('min', '1');
+		sheetsAcrossInput.setAttribute('type', 'number');
+		sheetsAcrossInput.style.width = '40px';
+		td2.appendChild(sheetsAcrossInput);
+		
+		var span = document.createElement('span');
+		mxUtils.write(span, mxResources.get('fitToSheetsAcross'));
+		td3.appendChild(span);
+
+		mxUtils.write(td4, mxResources.get('fitToBy'));
+		
+		var sheetsDownInput = sheetsAcrossInput.cloneNode(true);
+		td5.appendChild(sheetsDownInput);
+		
+		mxEvent.addListener(sheetsAcrossInput, 'focus', function()
+		{
+			fitRadio.checked = true;
+		});
+
+		mxEvent.addListener(sheetsDownInput, 'focus', function()
+		{
+			fitRadio.checked = true;
+		});
+
+		var span = document.createElement('span');
+		mxUtils.write(span, mxResources.get('fitToSheetsDown'));
+		td6.appendChild(span);
+		
+		row1.appendChild(td1);
+		row1.appendChild(td2);
+		row1.appendChild(td3);
+		
+		row2.appendChild(td4);
+		row2.appendChild(td5);
+		row2.appendChild(td6);
+		
+		tbody.appendChild(row1);
+		tbody.appendChild(row2);
+		table.appendChild(tbody);
+		fitSection.appendChild(table);
+		
+		div.appendChild(fitSection);
+		
+		// Page scale ...
+		var pageScaleSection = document.createElement('div');
+
+		var span = document.createElement('div');
+		span.style.fontWeight = 'bold';
+		span.style.marginBottom = '12px';
+		mxUtils.write(span, mxResources.get('paperSize'));
+		pageScaleSection.appendChild(span);
+		
+		var span = document.createElement('div');
+		span.style.marginBottom = '12px';
+
+		var accessor = PageSetupDialog.addPageFormatPanel(span, 'printdialog',
+			editorUi.editor.graph.pageFormat || mxConstants.PAGE_FORMAT_A4_PORTRAIT);
+		pageScaleSection.appendChild(span);
+		
+		var span = document.createElement('span');
+		mxUtils.write(span, mxResources.get('pageScale'));
+		pageScaleSection.appendChild(span);
+		
+		var pageScaleInput = document.createElement('input');
+		pageScaleInput.style.cssText = 'margin:0 8px 0 8px;';
+		pageScaleInput.setAttribute('value', '100 %');
+		pageScaleInput.style.width = '60px';
+		pageScaleSection.appendChild(pageScaleInput);
+		
+		div.appendChild(pageScaleSection);
+		
+		// Buttons
+		var buttons = document.createElement('div');
+		buttons.style.cssText = 'text-align:right;margin:62px 0 0 0;';
+		
+		// Overall scale for print-out to account for print borders in dialogs etc
+		function preview(print)
+		{
+			var printScale = parseInt(pageScaleInput.value) / 100;
+			
+			if (isNaN(printScale))
+			{
+				printScale = 1;
+				pageScaleInput.value = '100 %';
+			}
+			
+			// Workaround to match available paper size in actual print output
+			printScale *= 0.75;
+			
+			function printGraph(thisGraph, pv, forcePageBreaks)
+			{
+				// Negative coordinates are cropped or shifted if page visible
+				var gb = thisGraph.getGraphBounds();
+				var border = 0;
+				var x0 = 0;
+				var y0 = 0;
+		
+				var pf = accessor.get();
+				var scale = 1 / thisGraph.pageScale;
+				var autoOrigin = fitRadio.checked;
+		
+				if (autoOrigin)
+				{
+					var h = parseInt(sheetsAcrossInput.value);
+					var v = parseInt(sheetsDownInput.value);
+					
+					scale = Math.min((pf.height * v) / (gb.height / thisGraph.view.scale),
+						(pf.width * h) / (gb.width / thisGraph.view.scale));
+				}
+				else
+				{
+					scale = parseInt(zoomInput.value) / (100 * thisGraph.pageScale);
+					
+					if (isNaN(scale))
+					{
+						printScale = 1 / thisGraph.pageScale;
+						zoomInput.value = '100 %';
+					}
+				}
+		
+				// Applies print scale
+				pf = mxRectangle.fromRectangle(pf);
+				pf.width = Math.ceil(pf.width * printScale);
+				pf.height = Math.ceil(pf.height * printScale);
+				scale *= printScale;
+				
+				// Starts at first visible page
+				if (!autoOrigin && thisGraph.pageVisible)
+				{
+					var layout = thisGraph.getPageLayout();
+					x0 -= layout.x * pf.width;
+					y0 -= layout.y * pf.height;
+				}
+				else
+				{
+					autoOrigin = true;
+				}
+
+				if (pv == null)
+				{
+					pv = PrintDialog.createPrintPreview(thisGraph, scale, pf, border, x0, y0, autoOrigin);
+					pv.pageSelector = false;
+					pv.mathEnabled = false;
+					
+					var file = editorUi.getCurrentFile();
+					
+					if (file != null)
+					{
+						pv.title = file.getTitle();
+					}
+					
+					var writeHead = pv.writeHead;
+					
+					// Overridden to add custom fonts
+					pv.writeHead = function(doc)
+					{
+						writeHead.apply(this, arguments);
+						
+						if (editorUi.editor.fontCss != null)
+						{
+							doc.writeln('<style type="text/css">');
+							doc.writeln(editorUi.editor.fontCss);
+							doc.writeln('</style>');
+						}
+					};
+					
+					if (typeof(MathJax) !== 'undefined')
+					{
+						// Adds class to ignore if math is disabled
+						var printPreviewRenderPage = pv.renderPage;
+						
+						pv.renderPage = function(w, h, dx, dy, content, pageNumber)
+						{
+							var result = printPreviewRenderPage.apply(this, arguments);
+							
+							if (this.graph.mathEnabled)
+							{
+								this.mathEnabled = true;
+							}
+							else
+							{
+								result.className = 'geDisableMathJax';
+							}
+							
+							return result;
+						};
+					}
+					
+					pv.open(null, null, forcePageBreaks, true);
+				}
+				else
+				{				
+					var bg = thisGraph.background;
+					
+					if (bg == null || bg == '' || bg == mxConstants.NONE)
+					{
+						bg = '#ffffff';
+					}
+					
+					pv.backgroundColor = bg;
+					pv.autoOrigin = autoOrigin;
+					pv.appendGraph(thisGraph, scale, x0, y0, forcePageBreaks, true);
+				}
+				
+				return pv;
+			};
+			
+			var pagesFrom = pagesFromInput.value;
+			var pagesTo = pagesToInput.value;
+			var ignorePages = !allPagesRadio.checked;
+			var pv = null;
+						
+			if (ignorePages)
+			{
+				ignorePages = pagesFrom == currentPage && pagesTo == currentPage;
+			}
+			
+			if (!ignorePages && editorUi.pages != null && editorUi.pages.length)
+			{
+				var i0 = 0;
+				var imax = editorUi.pages.length - 1;
+				
+				if (!allPagesRadio.checked)
+				{
+					i0 = parseInt(pagesFrom) - 1;
+					imax = parseInt(pagesTo) - 1;
+				}
+				
+				for (var i = i0; i <= imax; i++)
+				{
+					var page = editorUi.pages[i];
+					var tempGraph = (page == editorUi.currentPage) ? graph : null;
+					
+					if (tempGraph == null)
+					{
+						tempGraph = editorUi.createTemporaryGraph(graph.getStylesheet());
+
+						// Restores graph settings that are relevant for printing
+						var pageVisible = true;
+						var mathEnabled = false;
+						var bg = null;
+						var bgImage = null;
+						
+						if (page.viewState == null && page.mapping == null)
+						{
+							// Workaround to extract view state from XML node
+							// This changes the state of the page and parses
+							// the XML for the graph model even if not needed.
+							if (page.root == null)
+							{
+								editorUi.updatePageRoot(page);
+							}
+						}
+						
+						if (page.viewState != null)
+						{
+							pageVisible = page.viewState.pageVisible;
+							mathEnabled = page.viewState.mathEnabled;
+							bg = page.viewState.background;
+							bgImage = page.viewState.backgroundImage;
+						}
+						else if (page.mapping != null && page.mapping.diagramMap != null)
+						{
+							// Default pageVisible in realtime is true
+							mathEnabled = page.mapping.diagramMap.get('mathEnabled') != '0';
+							bg = page.mapping.diagramMap.get('background');
+							
+							var temp = page.mapping.diagramMap.get('backgroundImage');
+							bgImage = (temp != null && temp.length > 0) ? JSON.parse(temp) : null;
+						}
+					
+						tempGraph.background = bg;
+						tempGraph.backgroundImage = (bgImage != null) ? new mxImage(bgImage.src, bgImage.width, bgImage.height) : null;
+						tempGraph.pageVisible = pageVisible;
+						tempGraph.mathEnabled = mathEnabled;
+						
+						// Redirects placeholders to current page
+						var graphGetGlobalVariable = tempGraph.getGlobalVariable;
+		
+						tempGraph.getGlobalVariable = function(name)
+						{
+							if (name == 'page')
+							{
+								return page.getName();
+							}
+							else if (name == 'pagenumber')
+							{
+								return i + 1;
+							}
+							
+							return graphGetGlobalVariable.apply(this, arguments);
+						};
+						
+						document.body.appendChild(tempGraph.container);
+						editorUi.updatePageRoot(page);
+						tempGraph.model.setRoot(page.root);
+					}
+
+					pv = printGraph(tempGraph, pv, i != imax);
+
+					if (tempGraph != graph)
+					{
+						tempGraph.container.parentNode.removeChild(tempGraph.container);
+					}
+				}
+			}
+			else
+			{
+				pv = printGraph(graph);
+			}
+			
+			if (pv.mathEnabled)
+			{
+				var doc = pv.wnd.document;
+		
+				doc.writeln('<script type="text/x-mathjax-config">');
+				doc.writeln('MathJax.Hub.Config({');
+				doc.writeln('messageStyle: "none",');
+				doc.writeln('jax: ["input/TeX", "input/MathML", "input/AsciiMath", "output/HTML-CSS"],');
+				doc.writeln('extensions: ["tex2jax.js", "mml2jax.js", "asciimath2jax.js"],');
+				doc.writeln('TeX: {');
+				doc.writeln('extensions: ["AMSmath.js", "AMSsymbols.js", "noErrors.js", "noUndefined.js"]');
+				doc.writeln('},');
+							// Ignores math in in-place editor
+				doc.writeln('tex2jax: {');
+				doc.writeln('	ignoreClass: "geDisableMathJax"');
+			  	doc.writeln('},');
+			  	doc.writeln('asciimath2jax: {');
+				doc.writeln('	ignoreClass: "geDisableMathJax"');
+			  	doc.writeln('}');
+				doc.writeln('});');
+				
+				// Adds asynchronous printing when MathJax finished rendering
+				if (print)
+				{
+					doc.writeln('MathJax.Hub.Queue(function () {');
+					doc.writeln('window.print();');
+					doc.writeln('});');
+				}
+				
+				doc.writeln('</script>');
+				doc.writeln('<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js"></script>');
+			}
+			
+			pv.closeDocument();
+			
+			if (!pv.mathEnabled && print)
+			{
+				PrintDialog.printPreview(pv);
+			}
+		};
+		
+		var cancelBtn = mxUtils.button(mxResources.get('cancel'), function()
+		{
+			editorUi.hideDialog();
+		});
+		cancelBtn.className = 'geBtn';
+		
+		if (editorUi.editor.cancelFirst)
+		{
+			buttons.appendChild(cancelBtn);
+		}
+		
+		if (!editorUi.isOffline())
+		{
+			var helpBtn = mxUtils.button(mxResources.get('help'), function()
+			{
+				window.open('https://desk.draw.io/support/solutions/articles/16000048947');
+			});
+			
+			helpBtn.className = 'geBtn';
+			buttons.appendChild(helpBtn);
+		}
+		
+		if (PrintDialog.previewEnabled)
+		{
+			var previewBtn = mxUtils.button(mxResources.get('preview'), function()
+			{
+				editorUi.hideDialog();
+				preview(false);
+			});
+			previewBtn.className = 'geBtn';
+			buttons.appendChild(previewBtn);
+		}
+		
+		var printBtn = mxUtils.button(mxResources.get((!PrintDialog.previewEnabled) ? 'ok' : 'print'), function()
+		{
+			editorUi.hideDialog();
+			preview(true);
+		});
+		printBtn.className = 'geBtn gePrimaryBtn';
+		buttons.appendChild(printBtn);
+		
+		if (!editorUi.editor.cancelFirst)
+		{
+			buttons.appendChild(cancelBtn);
+		}
+
+		div.appendChild(buttons);
+
+		this.container = div;
 	};
 })();

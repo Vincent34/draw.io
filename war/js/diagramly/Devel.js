@@ -10,6 +10,7 @@
 mxscript(drawDevUrl + 'js/spin/spin.min.js');
 mxscript(drawDevUrl + 'js/deflate/pako.min.js');
 mxscript(drawDevUrl + 'js/deflate/base64.js');
+mxscript(drawDevUrl + 'js/jscolor/jscolor.js');
 mxscript(drawDevUrl + 'js/sanitizer/sanitizer.min.js');
 
 // Uses grapheditor from devhost
@@ -31,6 +32,7 @@ mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Android.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-ArchiMate.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-ArchiMate3.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Arrows2.js');
+mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Atlassian.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-AWS.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-AWS3.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-AWS3D.js');
@@ -47,6 +49,7 @@ mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Floorplan.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Flowchart.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-GCP.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Gmdl.js');
+mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-IBM.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Ios.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-Ios7.js');
 mxscript(drawDevUrl + 'js/diagramly/sidebar/Sidebar-LeanMapping.js');
@@ -91,9 +94,35 @@ mxscript(drawDevUrl + 'js/diagramly/GitHubClient.js');
 mxscript(drawDevUrl + 'js/diagramly/OneDriveFile.js');
 mxscript(drawDevUrl + 'js/diagramly/OneDriveLibrary.js');
 mxscript(drawDevUrl + 'js/diagramly/OneDriveClient.js');
+mxscript(drawDevUrl + 'js/diagramly/TrelloFile.js');
+mxscript(drawDevUrl + 'js/diagramly/TrelloLibrary.js');
+mxscript(drawDevUrl + 'js/diagramly/TrelloClient.js');
 mxscript(drawDevUrl + 'js/diagramly/ChatWindow.js');
 
 mxscript(drawDevUrl + 'js/diagramly/App.js');
 mxscript(drawDevUrl + 'js/diagramly/Menus.js');
 mxscript(drawDevUrl + 'js/diagramly/Pages.js');
+mxscript(drawDevUrl + 'js/diagramly/Trees.js');
 mxscript(drawDevUrl + 'js/diagramly/DevTools.js');
+
+// Vsdx Export
+mxscript(drawDevUrl + 'js/diagramly/vsdx/VsdxExport.js');
+mxscript(drawDevUrl + 'js/diagramly/vsdx/mxVsdxCanvas2D.js');
+mxscript(drawDevUrl + 'js/jszip/jszip.min.js');
+
+// mxRuler
+mxscript(drawDevUrl + 'js/diagramly/ruler/mxRuler.js');
+
+//EquiSpaced Guides
+if (urlParams['distanceGuides'] == '1')
+{
+	mxscript(drawDevUrl + 'js/diagramly/DistanceGuides.js');
+}
+
+//Vsdx Import
+//mxscript(drawDevUrl + 'js/jszip/jszip.min.js');
+mxscript(drawDevUrl + 'js/vsdx/bmpDecoder.js');
+mxscript(drawDevUrl + 'js/vsdx/importer.js');
+
+//GraphMl Import
+mxscript(drawDevUrl + 'js/diagramly/graphml/mxGraphMlCodec.js');

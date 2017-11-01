@@ -89,6 +89,19 @@ public class mxVsdxGeometryList
 		return !geomList.isEmpty();
 	}
 	
+	public int getGeoCount()
+	{
+		int count = 0;
+		
+		for (mxVsdxGeometry geo : geomList) 
+		{
+			if (!geo.isNoShow()) 
+				count++;
+		}
+		
+		return count;
+	}
+	
 	private void rotatedPoint(mxPoint pt, double cos, double sin)
 	{
 		double x1 = pt.getX() * cos - pt.getY() * sin;
@@ -110,7 +123,7 @@ public class mxVsdxGeometryList
 		List<mxPoint> points = new ArrayList<mxPoint>();
 		
 		//Adding the starting point as a routing point instead of setting the entryX/Y
-		points.add(startPoint);
+		points.add(new mxPoint(startPoint));
 		
 		double offsetX = 0;
 		double offsetY = 0;

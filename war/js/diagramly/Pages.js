@@ -16,6 +16,27 @@
 function DiagramPage(node)
 {
 	this.node = node;
+	
+	// Create GUID for page (first part is workaround for old versions of IE)
+	if ((this.node.hasAttribute == null && this.node.getAttribute('id') == null) ||
+		(this.node.hasAttribute != null && !this.node.hasAttribute('id')))
+	{
+		// Make global if used anywhere else
+		function guid()
+		{
+		  function s4()
+		  {
+		    return Math.floor((1 + Math.random()) * 0x10000)
+		      .toString(16)
+		      .substring(1);
+		  }
+		  
+		  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+		    s4() + '-' + s4() + s4() + s4();
+		};
+		
+		this.node.setAttribute('id', guid());
+	}
 }
 
 /**
@@ -32,6 +53,14 @@ DiagramPage.prototype.root = null;
  * Holds the view state for the page.
  */
 DiagramPage.prototype.viewState = null;
+
+/**
+ * 
+ */
+DiagramPage.prototype.getId = function()
+{
+	return this.node.getAttribute('id');
+};
 
 /**
  * 
@@ -230,6 +259,25 @@ ChangePage.prototype.execute = function()
 	}
 
 	SelectPage.prototype.execute.apply(this, arguments);
+};
+
+/**
+ * Returns true if the given string contains an mxfile.
+ */
+EditorUi.prototype.getPageById = function(id)
+{
+	if (this.pages != null)
+	{
+		for (var i = 0; i < this.pages.length; i++)
+		{
+			if (this.pages[i].getId() == id)
+			{
+				return this.pages[i];
+			}
+		}
+	}
+	
+	return null;
 };
 
 /**
@@ -554,9 +602,11 @@ EditorUi.prototype.updatePageRoot = function(page)
 /**
  * Returns true if the given string contains an mxfile.
  */
-EditorUi.prototype.selectPage = function(page)
+EditorUi.prototype.selectPage = function(page, quiet)
 {
-	this.editor.graph.stopEditing();
+	quiet = (quiet != null) ? quiet : false;
+	this.editor.graph.isMouseDown = false;
+	this.editor.graph.reset();
 	
 	var edit = this.editor.graph.model.createUndoableEdit();
 	
@@ -568,7 +618,10 @@ EditorUi.prototype.selectPage = function(page)
 	edit.add(change);
 	edit.notify();
 	
-	this.editor.graph.model.fireEvent(new mxEventObject(mxEvent.UNDO, 'edit', edit));
+	if (!quiet)
+	{
+		this.editor.graph.model.fireEvent(new mxEventObject(mxEvent.UNDO, 'edit', edit));
+	}
 };
 
 /**
@@ -721,7 +774,10 @@ EditorUi.prototype.duplicatePage = function(page, name)
 		}
 		
 		// Clones the current page and takes a snapshot of the graph model and view state
-		var newPage = new DiagramPage(page.node.cloneNode(false));
+		var node = page.node.cloneNode(false);
+		node.removeAttribute('id');
+		
+		var newPage = new DiagramPage(node);
 		newPage.root = graph.cloneCells([graph.model.root])[0];
 		newPage.viewState = graph.getViewState();
 		
@@ -886,12 +942,13 @@ EditorUi.prototype.updateTabContainer = function()
 		var insertTab = null;
 		
 		// Not chromeless and not read-only file
-		if (graph.isEnabled())
+		if (urlParams['embed'] == 1 || (this.getCurrentFile() != null &&
+			this.getCurrentFile().isEditable()))
 		{
 			insertTab = this.createPageInsertTab();
 			this.tabContainer.appendChild(insertTab);
 		}
-		
+
 		if (wrapper.clientWidth > this.tabContainer.clientWidth - btnWidth)
 		{
 			if (insertTab != null)
@@ -1044,6 +1101,30 @@ EditorUi.prototype.createPageMenuTab = function()
 				{
 					this.insertPage();
 				}), parent);
+
+				var page = this.currentPage;
+				
+				if (page != null)
+				{
+					menu.addSeparator(parent);
+	
+					menu.addItem(mxResources.get('delete'), null, mxUtils.bind(this, function()
+					{
+						this.removePage(page);
+					}), parent);
+					
+					menu.addItem(mxResources.get('rename'), null, mxUtils.bind(this, function()
+					{
+						this.renamePage(page, page.getName());
+					}), parent);
+					
+					menu.addSeparator(parent);
+					
+					menu.addItem(mxResources.get('duplicate'), null, mxUtils.bind(this, function()
+					{
+						this.duplicatePage(page, mxResources.get('copyOf', [page.getName()]));
+					}), parent);
+				}
 			}
 		}));
 		

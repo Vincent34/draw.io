@@ -16,31 +16,40 @@
 		this.div.style.maxHeight = (h0 - 10) + 'px';
 	};
 	
+	Menus.prototype.createHelpLink = function(href)
+	{
+		var link = document.createElement('span');
+		link.setAttribute('title', mxResources.get('help'));
+		link.style.cssText = 'color:blue;text-decoration:underline;margin-left:12px;cursor:help;';
+		
+		var icon = document.createElement('img');
+		icon.setAttribute('border', '0');
+		icon.setAttribute('valign', 'bottom');
+		icon.setAttribute('src', Editor.helpImage);
+		link.appendChild(icon);
+		
+		mxEvent.addGestureListeners(link, mxUtils.bind(this, function(evt)
+		{
+			if (this.editorUi.menubar != null)
+			{
+				this.editorUi.menubar.hideMenu();
+			}
+			
+			this.editorUi.openLink(href);
+			mxEvent.consume(evt);
+		}));
+		
+		return link;
+	};
+
 	Menus.prototype.addLinkToItem = function(item, href)
 	{
 		if (item != null)
 		{
-			var link = document.createElement('span');
-			link.setAttribute('title', mxResources.get('help'));
-			link.style.cssText = 'color:blue;text-decoration:underline;margin-left:12px;cursor:help;';
-			
-			var icon = document.createElement('img');
-			icon.setAttribute('border', '0');
-			icon.setAttribute('valign', 'bottom');
-			icon.setAttribute('src', Editor.helpImage);
-			link.appendChild(icon);
-			
-			mxEvent.addGestureListeners(link, mxUtils.bind(this, function(evt)
-			{
-				this.editorUi.menubar.hideMenu();
-				window.open(href);
-				mxEvent.consume(evt);
-			}));
-			
-			item.firstChild.nextSibling.appendChild(link);
+			item.firstChild.nextSibling.appendChild(this.createHelpLink(href));
 		}
 	};
-	
+
 	var menusInit = Menus.prototype.init;
 	Menus.prototype.init = function()
 	{
@@ -58,6 +67,8 @@
 				(((urlParams['embed'] != '1' && urlParams['od'] != '0') || (urlParams['embed'] == '1' &&
 				urlParams['od'] == '1')) && !navigator.userAgent.match(/(iPad|iPhone|iPod)/g) &&
 				(navigator.userAgent.indexOf('MSIE') < 0 || document.documentMode >= 10));
+		var trelloEnabled = ((urlParams['embed'] != '1' && urlParams['tr'] != '0') || (urlParams['embed'] == '1' && urlParams['tr'] == '1')) &&
+			mxClient.IS_SVG && (document.documentMode == null || document.documentMode > 9);
 
 		if (!editorUi.isOffline())
 		{
@@ -81,20 +92,134 @@
 			dlg.init();
 		});
 		
-		editorUi.actions.get('print').funct = function()
+		editorUi.actions.put('exportSvg', new Action(mxResources.get('formatSvg') + '...', function()
 		{
-			editorUi.showDialog(new PrintDialog(editorUi).container, 360,
-				(editorUi.pages != null && editorUi.pages.length > 1) ?
-				420 : 360, true, true);
-		};
+			editorUi.showExportDialog(mxResources.get('formatSvg'), true, mxResources.get('export'),
+				'https://support.draw.io/display/DO/Exporting+Files',
+				mxUtils.bind(this, function(scale, transparentBackground, ignoreSelection,
+					addShadow, editable, embedImages, border, cropImage, currentPage)
+				{
+					var val = parseInt(scale);
+					
+					if (!isNaN(val) && val > 0)
+					{
+					   	editorUi.exportSvg(val / 100, transparentBackground, ignoreSelection,
+					   		addShadow, editable, embedImages, border, !cropImage, currentPage);
+					}
+				}), true, null, 'svg');
+		}));
 
-		// Export PDF action for chrome OS (same as print with different dialog title)
-		editorUi.actions.addAction('exportPdf', function()
+		editorUi.actions.put('exportXml', new Action(mxResources.get('formatXml') + '...', function()
 		{
-			editorUi.showDialog(new PrintDialog(editorUi, mxResources.get('formatPdf')).container, 360,
-				(editorUi.pages != null && editorUi.pages.length > 1) ?
-				420 : 360, true, true);
-		});
+			var div = document.createElement('div');
+			div.style.whiteSpace = 'nowrap';
+			var noPages = editorUi.pages == null || editorUi.pages.length <= 1;
+			
+			var hd = document.createElement('h3');
+			mxUtils.write(hd, mxResources.get('formatXml'));
+			hd.style.cssText = 'width:100%;text-align:center;margin-top:0px;margin-bottom:4px';
+			div.appendChild(hd);
+			
+			var selection = editorUi.addCheckbox(div, mxResources.get('selectionOnly'),
+				false, graph.isSelectionEmpty());
+			var pages = editorUi.addCheckbox(div, mxResources.get((noPages) ? 'compressed' : 'allPages'), true);
+			pages.style.marginBottom = '16px';
+			
+			mxEvent.addListener(selection, 'change', function()
+			{
+				if (selection.checked)
+				{
+					pages.setAttribute('disabled', 'disabled');
+				}
+				else
+				{
+					pages.removeAttribute('disabled');
+				}
+			});
+			
+			var dlg = new CustomDialog(editorUi, div, mxUtils.bind(this, function()
+			{
+				editorUi.downloadFile('xml', (noPages) ? !pages.checked : null, null,
+					!selection.checked, (!noPages) ? !pages.checked : null);
+			}), null, mxResources.get('export'));
+			
+			editorUi.showDialog(dlg.container, 300, 146, true, true);
+		}));
+		
+		editorUi.actions.put('exportHtml', new Action(mxResources.get('formatHtmlEmbedded') + '...', function()
+		{
+			if (editorUi.spinner.spin(document.body, mxResources.get('loading')))
+			{
+				editorUi.getPublicUrl(editorUi.getCurrentFile(), function(url)
+				{
+					editorUi.spinner.stop();
+					
+					editorUi.showHtmlDialog(mxResources.get('export'), null, url, function(publicUrl, zoomEnabled,
+						initialZoom, linkTarget, linkColor, fit, allPages, layers, lightbox, editLink)
+					{
+						editorUi.createHtml(publicUrl, zoomEnabled, initialZoom, linkTarget, linkColor,
+							fit, allPages, layers, lightbox, editLink, mxUtils.bind(this, function(html, scriptTag)
+							{
+								var basename = editorUi.getBaseFilename();
+								var result = '<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=5,IE=9" ><![endif]-->\n' +
+									'<!DOCTYPE html>\n<html>\n<head>\n<title>' + mxUtils.htmlEntities(basename) + '</title>\n' +
+									'<meta charset="utf-8"/>\n</head>\n<body>' + html + '\n' + scriptTag + '\n</body>\n</html>';
+								editorUi.saveData(basename + '.html', 'html', result, 'text/html');
+							}));
+					});
+				});
+			}
+		}));
+		
+		editorUi.actions.put('exportPdf', new Action(mxResources.get('formatPdf') + '...', function()
+		{
+			if (editorUi.isOffline() || editorUi.printPdfExport)
+			{
+				// Export PDF action for chrome OS (same as print with different dialog title)
+				editorUi.showDialog(new PrintDialog(editorUi, mxResources.get('formatPdf')).container, 360,
+						(editorUi.pages != null && editorUi.pages.length > 1) ?
+						420 : 360, true, true);
+			}
+			else
+			{
+				var div = document.createElement('div');
+				div.style.whiteSpace = 'nowrap';
+				
+				var hd = document.createElement('h3');
+				mxUtils.write(hd, mxResources.get('formatPdf'));
+				hd.style.cssText = 'width:100%;text-align:center;margin-top:0px;margin-bottom:4px';
+				div.appendChild(hd);
+				
+				var selection = editorUi.addCheckbox(div, mxResources.get('selectionOnly'),
+					false, graph.isSelectionEmpty());
+				var crop = editorUi.addCheckbox(div, mxResources.get('crop'),
+					!graph.pageVisible || !editorUi.pdfPageExport,
+					!editorUi.pdfPageExport);
+				crop.style.marginBottom = '16px';
+				
+				// Crop is only enabled if selection only is selected
+				if (!editorUi.pdfPageExport)
+				{
+					mxEvent.addListener(selection, 'change', function()
+					{
+						if (selection.checked)
+						{
+							crop.removeAttribute('disabled');
+						}
+						else
+						{
+							crop.setAttribute('disabled', 'disabled');
+						}
+					});	
+				}
+				
+				var dlg = new CustomDialog(editorUi, div, mxUtils.bind(this, function()
+				{
+					editorUi.downloadFile('pdf', null, null, !selection.checked, null, !crop.checked);
+				}), null, mxResources.get('export'));
+				editorUi.showDialog(dlg.container, 300, 146, true, true);
+			}
+		}));
 		
 		editorUi.actions.addAction('open...', function()
 		{
@@ -231,7 +356,7 @@
 		editorUi.actions.addAction('createRevision', function()
 		{
 			editorUi.actions.get('save').funct();
-		}, null, null, 'Ctrl+S');
+		}, null, null, Editor.ctrlKey + '+S');
 
 		editorUi.actions.addAction('upload...', function()
 		{
@@ -243,7 +368,7 @@
 				// LATER: Change to use message passing to deal with potential cross-domain
 				window.drawdata = editorUi.getFileData();
 				var filename = (file.getTitle() != null) ? file.getTitle() : editorUi.defaultFilename;
-				window.open(window.location.protocol + '//' + window.location.host + '/?create=drawdata&' +
+				editorUi.openLink(window.location.protocol + '//' + window.location.host + '/?create=drawdata&' +
 						((editorUi.mode == App.MODE_DROPBOX) ? 'mode=dropbox&' : '') +
 						'title=' + encodeURIComponent(filename));
 			}
@@ -303,7 +428,7 @@
 				editorUi.showDialog(dlg.container, 180, 180, true, true);
 				dlg.init();
 			}
-		}, null, null, 'Ctrl+Shift+M');
+		}, null, null, Editor.ctrlKey + '+Shift+M');
 
 		var copiedStyles = ['rounded', 'shadow', 'dashed', 'dashPattern', 'fontFamily', 'fontSize', 'fontColor', 'fontStyle',
 			 				'align', 'verticalAlign', 'strokeColor', 'strokeWidth', 'fillColor', 'gradientColor', 'swimlaneFillColor',
@@ -340,7 +465,7 @@
 			 		}
 				}
 			}
-		}, null, null, 'Ctrl+Shift+C');
+		}, null, null, Editor.ctrlKey + '+Shift+C');
 
 		editorUi.actions.addAction('pasteStyle', function()
 		{
@@ -373,7 +498,7 @@
 					graph.getModel().endUpdate();
 				}
 			}
-		}, null, null, 'Ctrl+Shift+V');
+		}, null, null, Editor.ctrlKey + '+Shift+V');
 		
 		editorUi.actions.put('pageBackgroundImage', new Action(mxResources.get('backgroundImage') + '...', function()
 		{
@@ -390,6 +515,34 @@
 			}
 		}));
 		
+		editorUi.actions.put('exportPng', new Action(mxResources.get('formatPng') + '...', function()
+		{
+			if (editorUi.isExportToCanvas())
+			{
+				// TODO: Enable include option if CRC is fixed
+				editorUi.showExportDialog(mxResources.get('image'), false, mxResources.get('export'),
+					'https://support.draw.io/display/DO/Exporting+Files',
+					mxUtils.bind(this, function(scale, transparentBackground, ignoreSelection,
+						addShadow, editable, embedImages, border, cropImage, currentPage)
+					{
+						var val = parseInt(scale);
+						
+						if (!isNaN(val) && val > 0)
+						{
+						   	editorUi.exportImage(val / 100, transparentBackground, ignoreSelection,
+						   		addShadow, editable, border, !cropImage, currentPage);
+						}
+					}), true, false, 'png');
+			}
+			else
+			{
+				editorUi.showRemoteExportDialog(mxResources.get('export'), null, mxUtils.bind(this, function(ignoreSelection, editable)
+				{
+					editorUi.downloadFile((editable) ? 'xmlpng' : 'png', null, null, ignoreSelection);
+				}));
+			}
+		}));
+		
 		action = editorUi.actions.put('shadowVisible', new Action(mxResources.get('shadow'), function()
 		{
 			graph.setShadowVisible(!graph.shadowVisible);
@@ -397,19 +550,30 @@
 		action.setToggleAction(true);
 		action.setSelectedCallback(function() { return graph.shadowVisible; });
 
+		var showingAbout = false;
+		
 		editorUi.actions.put('about', new Action(mxResources.get('aboutDrawio') + '...', function()
 		{
-			editorUi.showDialog(new AboutDialog(editorUi).container, 220, 300, true, true);
+			if (!showingAbout)
+			{
+				editorUi.showDialog(new AboutDialog(editorUi).container, 220, 300, true, true, function()
+				{
+					showingAbout = false;
+				});
+				
+				showingAbout = true;
+			}
+			
 		}, null, null, 'F1'));
 		
 		editorUi.actions.addAction('userManual...', function()
 		{
-			window.open('https://support.draw.io/display/DO/Draw.io+Online+User+Manual');
+			editorUi.openLink('https://support.draw.io/display/DO/Draw.io+Online+User+Manual');
 		});
 
 		editorUi.actions.addAction('support...', function()
 		{
-			window.open('https://support.draw.io/display/DO/draw.io+Online+Support');
+			editorUi.openLink('https://about.draw.io/support/');
 		});
 
 		editorUi.actions.addAction('exportOptionsDisabled...', function()
@@ -422,15 +586,15 @@
 		{
 			if (mxClient.IS_CHROMEAPP)
 			{
-				window.open('https://www.draw.io/shortcuts.svg');
+				editorUi.openLink('https://www.draw.io/shortcuts.svg');
 			}
 			else if (mxClient.IS_SVG)
 			{
-				window.open('shortcuts.svg');
+				editorUi.openLink('shortcuts.svg');
 			}
 			else
 			{
-				window.open('https://www.draw.io/?lightbox=1#Uhttps%3A%2F%2Fwww.draw.io%2Fshortcuts.svg');
+				editorUi.openLink('https://www.draw.io/?lightbox=1#Uhttps%3A%2F%2Fwww.draw.io%2Fshortcuts.svg');
 			}
 		});
 
@@ -443,7 +607,7 @@
 
 		editorUi.actions.addAction('quickStart...', function()
 		{
-			window.open('https://www.youtube.com/watch?v=8OaMWa4R1SE&t=1');
+			editorUi.openLink('https://www.youtube.com/watch?v=Z0D96ZikMkc');
 		});
 		
 		action = editorUi.actions.addAction('tags...', mxUtils.bind(this, function()
@@ -493,7 +657,36 @@
 		}));
 		action.setToggleAction(true);
 		action.setSelectedCallback(mxUtils.bind(this, function() { return this.findWindow != null && this.findWindow.window.isVisible(); }));
-
+		
+		editorUi.actions.put('exportVsdx', new Action(mxResources.get('formatVsdx') + ' (beta)...', function()
+		{
+			var delayed = mxUtils.bind(this, function()
+			{
+				// Checks for signature method
+				if (typeof(VsdxExport) !== 'undefined')
+				{
+					try
+					{
+						new VsdxExport(editorUi).exportCurrentDiagrams();
+					}
+					catch (e)
+					{
+						// ignore
+					}
+				}
+			});
+			
+			if (typeof(VsdxExport) === 'undefined' && !this.loadingVsdx && !editorUi.isOffline())
+			{
+				this.loadingVsdx = true;
+				mxscript('js/vsdx.min.js', delayed);
+			}
+			else
+			{
+				window.setTimeout(delayed, 0);
+			}
+		}));
+		
 		// Adds language menu to options only if localStorage is available for
 		// storing the choice. We do not want to use cookies for older browsers.
 		// Note that the URL param lang=XX is available for setting the language
@@ -609,7 +802,7 @@
 					mxEvent.addListener(realForm, 'submit', function()
 					{
 						// Logs search terms for improving search results
-						if (editorUi.enableLogging)
+						if (EditorUi.enableLogging)
 						{
 				        	try
 				        	{
@@ -663,6 +856,41 @@
 				this.addMenuItems(menu, ['support', '-', 'about']);
 			}
 
+			if (urlParams['ruler'] == '1')
+			{
+				mxResources.parse('rulerInch=Ruler unit: Inches');
+
+				this.editorUi.actions.addAction('rulerInch', mxUtils.bind(this, function()
+				{
+					this.editorUi.vRuler.setUnit(mxRuler.prototype.INCHES);
+					this.editorUi.hRuler.setUnit(mxRuler.prototype.INCHES);
+					this.editorUi.vRuler.drawRuler(true);
+					this.editorUi.hRuler.drawRuler(true);
+				}));
+
+				mxResources.parse('rulerCM=Ruler unit: CMs');
+
+				this.editorUi.actions.addAction('rulerCM', mxUtils.bind(this, function()
+				{
+					this.editorUi.vRuler.setUnit(mxRuler.prototype.CENTIMETER);
+					this.editorUi.hRuler.setUnit(mxRuler.prototype.CENTIMETER);
+					this.editorUi.vRuler.drawRuler(true);
+					this.editorUi.hRuler.drawRuler(true);
+				}));
+
+				mxResources.parse('rulerPixel=Ruler unit: Pixels');
+
+				this.editorUi.actions.addAction('rulerPixel', mxUtils.bind(this, function()
+				{
+					this.editorUi.vRuler.setUnit(mxRuler.prototype.PIXELS);
+					this.editorUi.hRuler.setUnit(mxRuler.prototype.PIXELS);
+					this.editorUi.vRuler.drawRuler(true);
+					this.editorUi.hRuler.drawRuler(true);
+				}));
+
+				this.addMenuItems(menu, ['-', 'rulerInch', 'rulerCM', 'rulerPixel'], parent);
+			}
+			
 			if (urlParams['test'] == '1')
 			{
 				// For showing the bounding box
@@ -829,14 +1057,14 @@
 		{
 			var file = editorUi.getCurrentFile();
 			
-			if (urlParams['embed'] == '1' || (file != null && file.isEditable()))
+			if (graph.isEnabled())
 			{
 				var cell = new mxCell('', new mxGeometry(0, 0, 120, 120), editorUi.defaultCustomShapeStyle);
 				cell.vertex = true;
 				
-		    	var dlg = new EditShapeDialog(editorUi, cell, mxResources.get('editShape') + ':', 630, 400);
-				editorUi.showDialog(dlg.container, 640, 480, true, false);
-				dlg.init();
+			    	var dlg = new EditShapeDialog(editorUi, cell, mxResources.get('editShape') + ':', 630, 400);
+					editorUi.showDialog(dlg.container, 640, 480, true, false);
+					dlg.init();
 			}
 		});
 		
@@ -849,10 +1077,10 @@
 					editorUi.spinner.stop();
 					
 					editorUi.showHtmlDialog(mxResources.get('create'), 'https://desk.draw.io/support/solutions/articles/16000042542',
-						url, function(publicUrl, zoomEnabled, initialZoom, linkTarget, linkColor, fit, allPages, layers, lightbox, edit)
+						url, function(publicUrl, zoomEnabled, initialZoom, linkTarget, linkColor, fit, allPages, layers, lightbox, editLink)
 					{
 						editorUi.createHtml(publicUrl, zoomEnabled, initialZoom, linkTarget, linkColor,
-							fit, allPages, layers, lightbox, edit, mxUtils.bind(this, function(html, scriptTag)
+							fit, allPages, layers, lightbox, editLink, mxUtils.bind(this, function(html, scriptTag)
 							{
 								var dlg = new EmbedDialog(editorUi, html + '\n' + scriptTag, null, null, function()
 								{
@@ -941,11 +1169,11 @@
 		
 		editorUi.actions.put('embedImage', new Action(mxResources.get('image') + '...', function()
 		{
-			editorUi.showEmbedImageDialog(function(fit, shadow, retina, lightbox, edit, layers)
+			editorUi.showEmbedImageDialog(function(fit, shadow, retina, lightbox, editLink, layers)
 			{
 				if (editorUi.spinner.spin(document.body, mxResources.get('loading')))
 				{
-					editorUi.createEmbedImage(fit, shadow, retina, lightbox, edit, layers, function(result)
+					editorUi.createEmbedImage(fit, shadow, retina, lightbox, editLink, layers, function(result)
 					{
 						editorUi.spinner.stop();
 						var dlg = new EmbedDialog(editorUi, result);
@@ -962,11 +1190,11 @@
 
 		editorUi.actions.put('embedSvg', new Action(mxResources.get('formatSvg') + '...', function()
 		{
-			editorUi.showEmbedImageDialog(function(fit, shadow, image, lightbox, edit, layers)
+			editorUi.showEmbedImageDialog(function(fit, shadow, image, lightbox, editLink, layers)
 			{
 				if (editorUi.spinner.spin(document.body, mxResources.get('loading')))
 				{
-					editorUi.createEmbedSvg(fit, shadow, image, lightbox, edit, layers, function(result)
+					editorUi.createEmbedSvg(fit, shadow, image, lightbox, editLink, layers, function(result)
 					{
 						editorUi.spinner.stop();
 						
@@ -989,7 +1217,7 @@
 			
 			editorUi.showPublishLinkDialog(mxResources.get('iframe'), null, '100%',
 				(Math.ceil((bounds.y + bounds.height - graph.view.translate.y) / graph.view.scale) + 2),
-				function(linkTarget, linkColor, allPages, lightbox, edit, layers, width, height)
+				function(linkTarget, linkColor, allPages, lightbox, editLink, layers, width, height)
 			{
 				if (editorUi.spinner.spin(document.body, mxResources.get('loading')))
 				{
@@ -999,7 +1227,7 @@
 						
 						var dlg = new EmbedDialog(editorUi, '<iframe frameborder="0" style="width:' + width +
 							';height:' + height + ';" src="' + editorUi.createLink(linkTarget, linkColor,
-							allPages, lightbox, edit, layers, url) + '"></iframe>');
+							allPages, lightbox, editLink, layers, url) + '"></iframe>');
 						editorUi.showDialog(dlg.container, 440, 240, true, true);
 						dlg.init();
 					});
@@ -1010,7 +1238,7 @@
 		editorUi.actions.put('publishLink', new Action(mxResources.get('link') + '...', function()
 		{
 			editorUi.showPublishLinkDialog(null, null, null, null,
-				function(linkTarget, linkColor, allPages, lightbox, edit, layers)
+				function(linkTarget, linkColor, allPages, lightbox, editLink, layers)
 			{
 				if (editorUi.spinner.spin(document.body, mxResources.get('loading')))
 				{
@@ -1018,7 +1246,7 @@
 					{
 						editorUi.spinner.stop();
 						var dlg = new EmbedDialog(editorUi, editorUi.createLink(linkTarget,
-							linkColor, allPages, lightbox, edit, layers, url));
+							linkColor, allPages, lightbox, editLink, layers, url));
 						editorUi.showDialog(dlg.container, 440, 240, true, true);
 						dlg.init();
 					});
@@ -1028,7 +1256,7 @@
 
 		editorUi.actions.addAction('googleDocs...', function()
 		{
-			window.open('http://docsaddon.draw.io');
+			editorUi.openLink('http://docsaddon.draw.io');
 		});
 
 		editorUi.actions.addAction('googleSites...', function()
@@ -1045,8 +1273,7 @@
 			}
 		});
 
-		// Adds plugins menu item in file menu only if localStorage is available for
-		// storing the plugins.
+		// Adds plugins menu item only if localStorage is available for storing the plugins
 		if (isLocalStorage || mxClient.IS_CHROMEAPP)
 		{
 			var action = editorUi.actions.addAction('scratchpad', function()
@@ -1111,6 +1338,14 @@
 					editorUi.editor.modified = false;
 					editorUi.editor.setStatus('');
 				}
+				
+				//Add support to saving files if embedded mode is running with files
+				var file = editorUi.getCurrentFile();
+				
+				if (file != null)
+				{
+					editorUi.saveFile();
+				}
 			};
 	
 			editorUi.actions.addAction('saveAndExit', function()
@@ -1122,6 +1357,7 @@
 			{
 				var fn = function()
 				{
+					editorUi.editor.modified = false;
 					var msg = (urlParams['proto'] == 'json') ? JSON.stringify({event: 'exit',
 						modified: editorUi.editor.modified}) : '';
 					var parent = window.opener || window.parent;
@@ -1144,39 +1380,25 @@
 		{
 			if (editorUi.isExportToCanvas())
 			{
-				menu.addItem(mxResources.get('formatPng') + '...', null, mxUtils.bind(this, function()
-				{
-					// TODO: Enable include option if CRC is fixed
-					editorUi.showExportDialog(mxResources.get('image'), false, mxResources.get('export'),
-						'https://support.draw.io/display/DO/Exporting+Files',
-						mxUtils.bind(this, function(scale, transparentBackground, ignoreSelection,
-							addShadow, editable, embedImages, border, cropImage, currentPage)
-						{
-							var val = parseInt(scale);
-							
-							if (!isNaN(val) && val > 0)
-							{
-							   	this.editorUi.exportImage(val / 100, transparentBackground, ignoreSelection,
-							   		addShadow, editable, border, !cropImage, currentPage);
-							}
-						}), true, false);
-				}), parent);
+				this.addMenuItems(menu, ['exportPng'], parent);
 				
 				if (editorUi.jpgSupported)
 				{
 					menu.addItem(mxResources.get('formatJpg') + '...', null, mxUtils.bind(this, function()
 					{
-						editorUi.showExportJpgDialog('https://support.draw.io/display/DO/Exporting+Files',
-							mxUtils.bind(this, function(scale, ignoreSelection, addShadow, border, cropImage)
+						editorUi.showExportDialog(mxResources.get('image'), false, mxResources.get('export'),
+							'https://support.draw.io/display/DO/Exporting+Files',
+							mxUtils.bind(this, function(scale, transparentBackground, ignoreSelection,
+								addShadow, editable, embedImages, border, cropImage, currentPage)
 							{
 								var val = parseInt(scale);
 								
 								if (!isNaN(val) && val > 0)
 								{
-								   	this.editorUi.exportImage(val / 100, false, ignoreSelection,
-								   		addShadow, false, border, !cropImage, false, 'jpeg');
+									this.editorUi.exportImage(val / 100, false, ignoreSelection,
+									   	addShadow, false, border, !cropImage, false, 'jpeg');
 								}
-							}), true);
+							}), true, false, 'jpeg');
 					}), parent);
 				}
 			}
@@ -1184,166 +1406,51 @@
 			// Disabled for standalone mode in iOS because new tab cannot be closed
 			else if (!editorUi.isOffline() && (!mxClient.IS_IOS || !navigator.standalone))
 			{
-				menu.addItem(mxResources.get('formatPng') + '...', null, mxUtils.bind(this, function()
-				{
-					editorUi.showRemoteExportDialog(mxResources.get('export'), null, mxUtils.bind(this, function(ignoreSelection, editable)
-					{
-						this.editorUi.downloadFile((editable) ? 'xmlpng' : 'png', null, null, ignoreSelection);
-					}));
-				}), parent);
+				this.addMenuItems(menu, ['exportPng'], parent);
 				
 				menu.addItem(mxResources.get('formatJpg') + '...', null, mxUtils.bind(this, function()
 				{
 					editorUi.showRemoteExportDialog(mxResources.get('export'), null, mxUtils.bind(this, function(ignoreSelection, editable)
 					{
-						this.editorUi.downloadFile('jpeg', null, null, ignoreSelection);
+						editorUi.downloadFile('jpeg', null, null, ignoreSelection);
 					}), true);
 				}), parent);
 			}
 			
-			menu.addItem(mxResources.get('formatSvg') + '...', null, mxUtils.bind(this, function()
-			{
-				editorUi.showExportDialog(mxResources.get('formatSvg'), true, mxResources.get('export'),
-					'https://support.draw.io/display/DO/Exporting+Files',
-					mxUtils.bind(this, function(scale, transparentBackground, ignoreSelection,
-						addShadow, editable, embedImages, border, cropImage, currentPage)
-					{
-						var val = parseInt(scale);
-						
-						if (!isNaN(val) && val > 0)
-						{
-						   	this.editorUi.exportSvg(val / 100, transparentBackground, ignoreSelection,
-						   		addShadow, editable, embedImages, border, !cropImage, currentPage);
-						}
-					}), true);
-			}), parent);
-
-			menu.addSeparator(parent);
-
+			this.addMenuItems(menu, ['exportSvg', '-'], parent);
+			
 			// Redirects export to PDF to print in Chrome App
-			if (editorUi.printPdfExport)
+			if (editorUi.isOffline() || editorUi.printPdfExport)
 			{
-				menu.addItem(mxResources.get('formatPdf') + '...', null, this.editorUi.actions.get('exportPdf').funct, parent);
+				this.addMenuItems(menu, ['exportPdf'], parent);
 			}
 			// Disabled for standalone mode in iOS because new tab cannot be closed
 			else if (!editorUi.isOffline() && (!mxClient.IS_IOS || !navigator.standalone))
 			{
-				menu.addItem(mxResources.get('formatPdf') + '...', null, mxUtils.bind(this, function()
-				{
-					var div = document.createElement('div');
-					div.style.whiteSpace = 'nowrap';
-					
-					var hd = document.createElement('h3');
-					mxUtils.write(hd, mxResources.get('formatPdf'));
-					hd.style.cssText = 'width:100%;text-align:center;margin-top:0px;margin-bottom:4px';
-					div.appendChild(hd);
-					
-					var selection = editorUi.addCheckbox(div, mxResources.get('selectionOnly'),
-						false, graph.isSelectionEmpty());
-					var crop = editorUi.addCheckbox(div, mxResources.get('crop'),
-						!graph.pageVisible || !editorUi.pdfPageExport,
-						!editorUi.pdfPageExport);
-					crop.style.marginBottom = '16px';
-					
-					// Crop is only enabled if selection only is selected
-					if (!editorUi.pdfPageExport)
-					{
-						mxEvent.addListener(selection, 'change', function()
-						{
-							if (selection.checked)
-							{
-								crop.removeAttribute('disabled');
-							}
-							else
-							{
-								crop.setAttribute('disabled', 'disabled');
-							}
-						});	
-					}
-					
-					var dlg = new CustomDialog(editorUi, div, mxUtils.bind(this, function()
-					{
-						this.editorUi.downloadFile('pdf', null, null, !selection.checked, null, !crop.checked);
-					}), null, mxResources.get('export'));
-					this.editorUi.showDialog(dlg.container, 300, 146, true, true);
-				}), parent);
+				this.addMenuItems(menu, ['exportPdf'], parent);
 			}
 
-			menu.addItem(mxResources.get('formatHtmlEmbedded') + '...', null, mxUtils.bind(this, function()
-			{
-				if (editorUi.spinner.spin(document.body, mxResources.get('loading')))
-				{
-					editorUi.getPublicUrl(editorUi.getCurrentFile(), function(url)
-					{
-						editorUi.spinner.stop();
-						
-						editorUi.showHtmlDialog(mxResources.get('export'), null, url, function(publicUrl, zoomEnabled,
-							initialZoom, linkTarget, linkColor, fit, allPages, layers, lightbox, edit)
-						{
-							editorUi.createHtml(publicUrl, zoomEnabled, initialZoom, linkTarget, linkColor,
-								fit, allPages, layers, lightbox, edit, mxUtils.bind(this, function(html, scriptTag)
-								{
-									var basename = editorUi.getBaseFilename();
-									var result = '<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=5,IE=9" ><![endif]-->\n' +
-										'<!DOCTYPE html>\n<html>\n<head>\n<title>' + mxUtils.htmlEntities(basename) + '</title>\n' +
-										'<meta charset="utf-8"/>\n</head>\n<body>' + html + '\n' + scriptTag + '\n</body>\n</html>';
-									editorUi.saveData(basename + '.html', 'html', result, 'text/html');
-								}));
-						});
-					});
-				}
-				
-				//this.editorUi.downloadFile('html');
-			}), parent);
+			this.addMenuItems(menu, ['exportHtml'], parent);
 
-			menu.addSeparator(parent);
-
-			menu.addItem(mxResources.get('formatXml') + '...', null, mxUtils.bind(this, function()
+			// LATER: Fix namespace prefix (NS1, NS2..) in XML
+			// serializer for VSDX export in IE11 and earlier
+			if (!mxClient.IS_IE11 && !mxClient.IS_IE && (typeof(VsdxExport) !== 'undefined' || !editorUi.isOffline()))
 			{
-				var div = document.createElement('div');
-				div.style.whiteSpace = 'nowrap';
-				var noPages = editorUi.pages == null || editorUi.pages.length <= 1;
-				
-				var hd = document.createElement('h3');
-				mxUtils.write(hd, mxResources.get('formatXml'));
-				hd.style.cssText = 'width:100%;text-align:center;margin-top:0px;margin-bottom:4px';
-				div.appendChild(hd);
-				
-				var selection = editorUi.addCheckbox(div, mxResources.get('selectionOnly'),
-					false, graph.isSelectionEmpty());
-				var pages = editorUi.addCheckbox(div, mxResources.get((noPages) ? 'compressed' : 'allPages'), true);
-				pages.style.marginBottom = '16px';
-				
-				mxEvent.addListener(selection, 'change', function()
-				{
-					if (selection.checked)
-					{
-						pages.setAttribute('disabled', 'disabled');
-					}
-					else
-					{
-						pages.removeAttribute('disabled');
-					}
-				});
-				
-				var dlg = new CustomDialog(editorUi, div, mxUtils.bind(this, function()
-				{
-					editorUi.downloadFile('xml', (noPages) ? !pages.checked : null, null,
-						!selection.checked, (!noPages) ? !pages.checked : null);
-				}), null, mxResources.get('export'));
-				this.editorUi.showDialog(dlg.container, 300, 146, true, true);
-			}), parent);
+				this.addMenuItems(menu, ['exportVsdx'], parent);
+			}
+
+			this.addMenuItems(menu, ['-', 'exportXml'], parent);
 
 			// Disables menu item for all external hosted integrations
-			if (/.*\.draw\.io$/.test(window.location.hostname))
+			if (mxClient.IS_CHROMEAPP || EditorUi.isElectronApp ||/.*\.draw\.io$/.test(window.location.hostname))
 			{
 				menu.addItem(mxResources.get('url') + '...', null, mxUtils.bind(this, function()
 				{
 					editorUi.showPublishLinkDialog(mxResources.get('url'), true, null, null,
-						function(linkTarget, linkColor, allPages, lightbox, edit, layers)
+						function(linkTarget, linkColor, allPages, lightbox, editLink, layers)
 					{
-						var dlg = new EmbedDialog(editorUi, editorUi.createLink(
-							linkTarget, linkColor, allPages, lightbox, edit, layers, null, true));
+						var dlg = new EmbedDialog(editorUi, editorUi.createLink(linkTarget,
+							linkColor, allPages, lightbox, editLink, layers, null, true));
 						editorUi.showDialog(dlg.container, 440, 240, true, true);
 						dlg.init();
 					});
@@ -1432,22 +1539,40 @@
 				if (data.substring(0, 11) == 'data:image/')
 				{
 					editorUi.loadImage(data, mxUtils.bind(this, function(img)
-	    			{
-	    				editorUi.resizeImage(img, data, mxUtils.bind(this, function(data2, w2, h2)
-	    				{
-		    				var s = Math.min(1, Math.min(editorUi.maxImageSize / w2, editorUi.maxImageSize / h2));
-
-							editorUi.importFile(data, mime, x, y, Math.round(w2 * s), Math.round(h2 * s), filename, function(cells)
-							{
-								editorUi.spinner.stop();
-								graph.setSelectionCells(cells);
-								graph.scrollCellToVisible(graph.getSelectionCell());
-							});
-	    				}), true);
-	    			}), mxUtils.bind(this, function()
-	    			{
-	    				editorUi.handleError({message: mxResources.get('cannotOpenFile')});
-	    			}));
+		    			{
+				    		var resizeImages = true;
+				    		
+				    		var doInsert = mxUtils.bind(this, function()
+				    		{
+			    				editorUi.resizeImage(img, data, mxUtils.bind(this, function(data2, w2, h2)
+		    	    				{
+		    		    				var s = (resizeImages) ? Math.min(1, Math.min(editorUi.maxImageSize / w2, editorUi.maxImageSize / h2)) : 1;
+		
+	    							editorUi.importFile(data, mime, x, y, Math.round(w2 * s), Math.round(h2 * s), filename, function(cells)
+	    							{
+	    								editorUi.spinner.stop();
+	    								graph.setSelectionCells(cells);
+	    								graph.scrollCellToVisible(graph.getSelectionCell());
+	    							});
+		    	    				}), resizeImages);
+				    		});
+				    		
+				    		if (data.length > editorUi.resampleThreshold)
+				    		{
+				    			editorUi.confirmImageResize(function(doResize)
+		    					{
+		    						resizeImages = doResize;
+		    						doInsert();
+		    					});
+				    		}
+				    		else
+			    			{
+				    			doInsert();
+			    			}
+		    			}), mxUtils.bind(this, function()
+		    			{
+		    				editorUi.handleError({message: mxResources.get('cannotOpenFile')});
+		    			}));
 				}
 				else
 				{
@@ -1563,6 +1688,21 @@
 			else if (oneDriveEnabled)
 			{
 				menu.addItem(mxResources.get('oneDrive') + ' (' + mxResources.get('loading') + '...)', null, function()
+				{
+					// do nothing
+				}, parent, null, false);
+			}
+			
+			if (editorUi.trello != null)
+			{
+				menu.addItem(mxResources.get('trello') + '...', null, function()
+				{
+					pickFileFromService(editorUi.trello);
+				}, parent);
+			}
+			else if (trelloEnabled)
+			{
+				menu.addItem(mxResources.get('trello') + ' (' + mxResources.get('loading') + '...)', null, function()
 				{
 					// do nothing
 				}, parent, null, false);
@@ -1795,12 +1935,12 @@
 
 		editorUi.actions.put('offline', new Action(mxResources.get('offline') + '...', function()
 		{
-		    window.open('http://www.draw.io/app')
+			editorUi.openLink('https://www.draw.io/app')
 		}));
 		
-		editorUi.actions.put('chromeApp', new Action(mxResources.get('chromeApp') + '...', function()
+		editorUi.actions.put('download', new Action(mxResources.get('download') + '...', function()
 		{
-			window.open('https://chrome.google.com/webstore/detail/drawio-desktop/pebppomjfocnoigkeepgbmcifnnlndla')
+			editorUi.openLink('https://download.draw.io')
 		}));
 
 		this.editorUi.actions.addAction('share...', mxUtils.bind(this, function()
@@ -1833,21 +1973,7 @@
 			}
 		})));
 
-		// Overrides arrange menu to add insert submenu
-		this.put('arrange', new Menu(mxUtils.bind(this, function(menu, parent)
-		{
-			this.addMenuItems(menu, ['toFront', 'toBack', '-'], parent);
-			this.addSubmenu('direction', menu, parent);
-			this.addMenuItems(menu, ['turn', '-'], parent);
-			this.addSubmenu('align', menu, parent);
-			this.addSubmenu('distribute', menu, parent);
-			menu.addSeparator(parent);
-			this.addSubmenu('navigation', menu, parent);
-			this.addSubmenu('layout', menu, parent);
-			this.addMenuItems(menu, ['-', 'group', 'ungroup', 'removeFromGroup', '-', 'editGeometry', 'clearWaypoints', 'autosize'], parent);
-		})));
-		
-		var methods = ['horizontalFlow', 'verticalFlow', '-', 'horizontalTree', 'verticalTree', '-', 'organic', 'circle', '-', 'fromText'];
+		var methods = ['horizontalFlow', 'verticalFlow', '-', 'horizontalTree', 'verticalTree', 'radialTree', '-', 'organic', 'circle', '-', 'fromText'];
 
 		var addInsertItem = function(menu, parent, title, method)
 		{
@@ -1870,45 +1996,65 @@
 			}), parent);
 		};
 		
+		var insertVertex = function(value, w, h, style)
+		{
+			var pt = (graph.isMouseInsertPoint()) ? graph.getInsertPoint() : graph.getFreeInsertPoint();
+			var cell = new mxCell(value, new mxGeometry(pt.x, pt.y, w, h), style);
+			cell.vertex = true;
+			
+        		graph.getModel().beginUpdate();
+        		try
+        	    {
+        			cell = graph.addCell(cell);
+        	    		graph.fireEvent(new mxEventObject('cellsInserted', 'cells', [cell]));
+        	    }
+        		finally
+        		{
+        			graph.getModel().endUpdate();
+        		}
+			
+        		graph.setSelectionCell(cell);
+        		graph.scrollCellToVisible(cell);
+    	    		
+    	    		return cell;
+		};
+		
 		editorUi.actions.addAction('insertText', function()
 		{
 			if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
 			{
-				var pt = (graph.isMouseInsertPoint()) ? graph.getInsertPoint() : graph.getFreeInsertPoint();
-				var cell = new mxCell('Text', new mxGeometry(pt.x, pt.y, 40, 20),
-			    	'text;html=1;resizable=0;autosize=1;align=left;verticalAlign=top;spacingTop=-4;points=[];');
-				cell.vertex = true;
-	    	    graph.startEditingAtCell(graph.addCell(cell));
+    	    			graph.startEditingAtCell(insertVertex('Text', 40, 20, 'text;html=1;resizable=0;autosize=1;' +
+    	    				'align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;'));
 			}
-		}, null, null, 'Ctrl+Shift+X').isEnabled = isGraphEnabled;
+		}, null, null, Editor.ctrlKey + '+Shift+X').isEnabled = isGraphEnabled;
 		
 		editorUi.actions.addAction('insertRectangle', function()
 		{
 			if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
 			{
-				var pt = (graph.isMouseInsertPoint()) ? graph.getInsertPoint() : graph.getFreeInsertPoint();
-				var cell = new mxCell('', new mxGeometry(pt.x, pt.y, 120, 60), 'whiteSpace=wrap;html=1;');
-				cell.vertex = true;
-	    	    graph.setSelectionCell(graph.addCell(cell));
-	    	    graph.scrollCellToVisible(graph.getSelectionCell());
+    	    			insertVertex('', 120, 60, 'whiteSpace=wrap;html=1;');
 			}
-		}, null, null, 'Ctrl+K').isEnabled = isGraphEnabled;
+		}, null, null, Editor.ctrlKey + '+K').isEnabled = isGraphEnabled;
 		
 		editorUi.actions.addAction('insertEllipse', function()
 		{
 			if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
 			{
-				var pt = (graph.isMouseInsertPoint()) ? graph.getInsertPoint() : graph.getFreeInsertPoint();
-				var cell = new mxCell('', new mxGeometry(pt.x, pt.y, 80, 80), 'ellipse;whiteSpace=wrap;html=1;');
-				cell.vertex = true;
-	    	    graph.setSelectionCell(graph.addCell(cell));
-	    	    graph.scrollCellToVisible(graph.getSelectionCell());
+    	    			insertVertex('', 80, 80, 'ellipse;whiteSpace=wrap;html=1;');
 			}
-		}, null, null, 'Ctrl+Shift+K').isEnabled = isGraphEnabled;
+		}, null, null, Editor.ctrlKey + '+Shift+K').isEnabled = isGraphEnabled;
+		
+		editorUi.actions.addAction('insertRhombus', function()
+		{
+			if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
+			{
+    	    			insertVertex('', 80, 80, 'rhombus;whiteSpace=wrap;html=1;');
+			}
+		}).isEnabled = isGraphEnabled;
 		
 		this.put('insert', new Menu(mxUtils.bind(this, function(menu, parent)
 		{
-			this.addMenuItems(menu, ['insertText', 'insertRectangle', 'insertEllipse', '-', 'insertLink', 'insertImage'], parent);
+			this.addMenuItems(menu, ['insertText', 'insertRectangle', '-', 'insertEllipse', 'insertRhombus', '-', 'insertLink', 'insertImage'], parent);
 			menu.addSeparator(parent);
 			
 			for (var i = 0; i < methods.length; i++)
@@ -2012,6 +2158,21 @@
 			else if (oneDriveEnabled)
 			{
 				menu.addItem(mxResources.get('oneDrive') + ' (' + mxResources.get('loading') + '...)', null, function()
+				{
+					// do nothing
+				}, parent, null, false);
+			}
+			
+			if (editorUi.trello != null)
+			{
+				menu.addItem(mxResources.get('trello') + '...', null, function()
+				{
+					editorUi.pickFile(App.MODE_TRELLO);
+				}, parent);
+			}
+			else if (trelloEnabled)
+			{
+				menu.addItem(mxResources.get('trello') + ' (' + mxResources.get('loading') + '...)', null, function()
 				{
 					// do nothing
 				}, parent, null, false);
@@ -2121,6 +2282,21 @@
 				}, parent, null, false);
 			}
 			
+			if (editorUi.trello != null)
+			{
+				menu.addItem(mxResources.get('trello') + '...', null, function()
+				{
+					editorUi.showLibraryDialog(null, null, null, null, App.MODE_TRELLO);
+				}, parent);
+			}
+			else if (trelloEnabled)
+			{
+				menu.addItem(mxResources.get('trello') + ' (' + mxResources.get('loading') + '...)', null, function()
+				{
+					// do nothing
+				}, parent, null, false);
+			}
+			
 			menu.addSeparator(parent);
 
 			if (isLocalStorage && urlParams['browser'] != '0')
@@ -2193,6 +2369,21 @@
 			else if (oneDriveEnabled)
 			{
 				menu.addItem(mxResources.get('oneDrive') + ' (' + mxResources.get('loading') + '...)', null, function()
+				{
+					// do nothing
+				}, parent, null, false);
+			}
+			
+			if (editorUi.trello != null)
+			{
+				menu.addItem(mxResources.get('trello') + '...', null, function()
+				{
+					editorUi.pickLibrary(App.MODE_TRELLO);
+				}, parent);
+			}
+			else if (trelloEnabled)
+			{
+				menu.addItem(mxResources.get('trello') + ' (' + mxResources.get('loading') + '...)', null, function()
 				{
 					// do nothing
 				}, parent, null, false);
@@ -2314,8 +2505,6 @@
 				menu.addSeparator(parent);
 			}
 			
-			this.addSubmenu('insert', menu, parent);
-			menu.addSeparator(parent);
 			this.addMenuItems(menu, ['copyConnect', 'collapseExpand', '-'], parent);
 
 			if (typeof(MathJax) !== 'undefined')
@@ -2323,8 +2512,13 @@
 				var item = this.addMenuItem(menu, 'mathematicalTypesetting', parent);
 				this.addLinkToItem(item, 'https://desk.draw.io/support/solutions/articles/16000032875');
 			}
+			
+			if (urlParams['embed'] != '1')
+			{
+				this.addMenuItems(menu, ['autosave'], parent);
+			}
 
-			this.addMenuItems(menu, ['autosave', '-', 'createShape', 'editDiagram'], parent);
+			this.addMenuItems(menu, ['-', 'createShape', 'editDiagram'], parent);
 
 			menu.addSeparator(parent);
 			
@@ -2335,25 +2529,32 @@
 
 			if (!editorUi.isOfflineApp() && urlParams['embed'] != '1')
 			{
-				this.addMenuItems(menu, ['plugins', '-'], parent);
-				
-				var item = this.addMenuItem(menu, 'tags', parent);
+				var item = this.addMenuItem(menu, 'plugins', parent);
 				
 				if (!editorUi.isOffline() || mxClient.IS_CHROMEAPP)
 				{
-					this.addLinkToItem(item, 'https://desk.draw.io/support/solutions/articles/16000046966');
+					this.addLinkToItem(item, 'https://desk.draw.io/support/solutions/articles/16000056430');
 				}
+			}
 				
-				this.addMenuItems(menu, ['-', 'offline'], parent);
-			}
-			else
-			{
-				menu.addSeparator(parent);
-			}
+			menu.addSeparator(parent);
+			var item = this.addMenuItem(menu, 'tags', parent);
 			
+			if (!editorUi.isOffline())
+			{
+				this.addLinkToItem(item, 'https://desk.draw.io/support/solutions/articles/16000046966');
+			}
+
+			menu.addSeparator(parent);
+
 			if (!editorUi.isOffline() && !navigator.standalone && urlParams['embed'] != '1')
 			{
-				this.addMenuItems(menu, ['chromeApp'], parent);
+				this.addMenuItems(menu, ['download'], parent);
+			}
+			
+			if (!editorUi.isOfflineApp() && urlParams['embed'] != '1')
+			{
+				this.addMenuItems(menu, ['offline'], parent);
 			}
 		})));
 
@@ -2475,5 +2676,28 @@
 				this.addMenuItems(menu, ['-', 'close']);
 			}
 		})));
+	};
+
+	/**
+	 * Replaces help menu label with icon on small screen
+	 */
+	var menuCreated = Menus.prototype.menuCreated;
+	
+	Menus.prototype.menuCreated = function(menu, elt)
+	{
+		if (screen.width <= 480 && menu == this.get('help'))
+		{
+			elt.style.paddingRight = '0px';
+			elt.style.paddingLeft = '0px';
+			elt.innerHTML = '';
+			
+			var icon = document.createElement('img');
+			icon.setAttribute('border', '0');
+			icon.setAttribute('valign', 'bottom');
+			icon.setAttribute('src', Editor.helpImage);
+			elt.appendChild(icon);
+		}
+		
+		menuCreated.apply(this, arguments);
 	};
 })();

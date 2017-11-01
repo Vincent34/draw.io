@@ -3,8 +3,9 @@
 	// Adds Cabinets shapes
 	Sidebar.prototype.addCabinetsPalette = function()
 	{
-		var s = mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=bottom;dashed=0;shadow=0;strokeColor=#000000;fillColor=#ffffff;html=1;align=center;' + mxConstants.STYLE_VERTICAL_ALIGN + '=top;' + mxConstants.STYLE_STROKEWIDTH + '=1;shape=mxgraph.cabinets.';
-		var s2 = mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=middle;dashed=0;shadow=0;strokeColor=#000000;fillColor=#ffffff;html=1;' + mxConstants.STYLE_STROKEWIDTH + '=1;shape=mxgraph.cabinets.';
+		var s = mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=bottom;dashed=0;shadow=0;html=1;align=center;' + mxConstants.STYLE_VERTICAL_ALIGN + '=top;shape=mxgraph.cabinets.';
+		var s2 = mxConstants.STYLE_VERTICAL_LABEL_POSITION + '=middle;dashed=0;shadow=0;html=1;shape=mxgraph.cabinets.';
+		var inh = 'strokeColor=inherit;fillColor=inherit;gradientColor=inherit;';
 		var w = 50;
 		var h = 50;
 		var gn = 'mxgraph.cabinets';
@@ -43,8 +44,8 @@
 					w * 7, h, '100x40', 'Panel Wiring System 100x40mm (Vertical)', null, null, this.getTagsForStencil(gn, '', dt + 'panel wiring system').join(' ')),
 			this.createVertexTemplateEntry(s + 'cb_1p;', 
 					w * 0.18, h, '', 'Circuit Breaker (1P)', null, null, this.getTagsForStencil(gn, 'cb_1p', dt).join(' ')),
-
-		   	this.addEntry(dt + 'circuit breaker row', function()
+					
+			this.addEntry(dt + 'circuit breaker row', function()
 	   		{
 			   	var bg1 = new mxCell('', new mxGeometry(0, 0, w * 0.18, h), s + 'cb_1p;');
 			   	bg1.vertex = true;
@@ -68,11 +69,11 @@
 			   	bg10.vertex = true;
 			    
 			   	return sb.createVertexTemplateFromCells([bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10], w * 1.8, h, 'Circuit Breaker (1P x 10)');
-			}),
-
+			}),				
+				
 			this.createVertexTemplateEntry(s + 'cb_2p;', w * 0.36, h, '', 'Circuit Breaker (2P)', null, null, this.getTagsForStencil(gn, 'cb_2p', dt).join(' ')),
-
-		   	this.addEntry(dt + 'circuit breaker row', function()
+			
+			this.addEntry(dt + 'circuit breaker row', function()
 	   		{
 			   	var bg1 = new mxCell('', new mxGeometry(0, 0, w * 0.36, h), s + 'cb_2p;');
 			   	bg1.vertex = true;
@@ -96,11 +97,11 @@
 			   	bg10.vertex = true;
 			    
 			   	return sb.createVertexTemplateFromCells([bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10], w * 3.6, h, 'Circuit Breaker (2P x 10)');
-			}),
-
+			}),				
+				
 			this.createVertexTemplateEntry(s + 'cb_3p;', w * 0.54, h, '', 'Circuit Breaker (3P)', null, null, this.getTagsForStencil(gn, 'cb_3p', dt).join(' ')),
-
-		   	this.addEntry(dt + 'circuit breaker row', function()
+			
+			this.addEntry(dt + 'circuit breaker row', function()
 	   		{
 			   	var bg1 = new mxCell('', new mxGeometry(0, 0, w * 0.54, h), s + 'cb_3p;');
 			   	bg1.vertex = true;
@@ -114,11 +115,11 @@
 			   	bg5.vertex = true;
 			    
 			   	return sb.createVertexTemplateFromCells([bg1, bg2, bg3, bg4, bg5], w * 2.7, h, 'Circuit Breaker (3P x 5)');
-			}),
-	
+			}),				
+				
 			this.createVertexTemplateEntry(s + 'cb_4p;', w * 0.72, h, '', 'Circuit Breaker (4P)', null, null, this.getTagsForStencil(gn, 'cb_4p', dt).join(' ')),
-
-		   	this.addEntry(dt + 'circuit breaker row', function()
+			
+			this.addEntry(dt + 'circuit breaker row', function()
 	   		{
 				var bg1 = new mxCell('', new mxGeometry(0, 0, w * 0.72, h), s + 'cb_4p;');
 			   	bg1.vertex = true;
@@ -132,7 +133,7 @@
 			   	bg5.vertex = true;
 			    
 			   	return sb.createVertexTemplateFromCells([bg1, bg2, bg3, bg4, bg5], w * 3.6, h, 'Circuit Breaker (4P x 5)');
-			}),
+			}),				
 				
 			this.createVertexTemplateEntry(s + 'cb_auxiliary_contact;', 
 					w * 0.09, h, '', 'Auxiliary Contact (Circuit Breaker)', null, null, this.getTagsForStencil(gn, 'cb_auxiliary_contact', dt).join(' ')),

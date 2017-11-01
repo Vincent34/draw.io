@@ -71,13 +71,11 @@ Draw.loadPlugin(function(ui) {
 	mxResources.parse('number=Number');
 
     // Adds action
-    ui.actions.addAction('number...', function()
+    var action = ui.actions.addAction('number...', function()
     {
 		enabled = !enabled;
 		graph.refresh();
     });
-	
-	var action = ui.actions.get('number');
 	
     action.setToggleAction(true);
 	action.setSelectedCallback(function() { return enabled; });
@@ -91,4 +89,10 @@ Draw.loadPlugin(function(ui) {
 		
 		ui.menus.addMenuItems(menu, ['-', 'number'], parent);
 	};
+	
+	// Forces refresh if file was loaded before plugin
+	if (ui.getCurrentFile() != null)
+	{
+		graph.refresh();
+	}
 });

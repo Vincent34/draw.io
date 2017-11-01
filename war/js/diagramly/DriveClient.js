@@ -64,10 +64,10 @@ DriveClient.prototype.scopes = (urlParams['photos'] == '1') ?
 DriveClient.prototype.enableThumbnails = true;
 
 /**
- * Specifies the width for thumbnails. Default is 480. This value
+ * Specifies the width for thumbnails. Default is 1000. This value
  * must be between 220 and 1600.
  */
-DriveClient.prototype.thumbnailWidth = 480;
+DriveClient.prototype.thumbnailWidth = 1000;
 
 /**
  * The maximum number of bytes per thumbnail. Default is 2000000.
@@ -638,8 +638,11 @@ DriveClient.prototype.getFile = function(id, success, error, readXml, readLibrar
 		{
 			if (this.user != null)
 			{
+				var binary = /\.png$/i.test(resp.title);
+				
 				// Handles .vsdx, Gliffy and PNG+XML files by creating a temporary file
-				if ((/\.vsdx$/i.test(resp.title) || /\.gliffy$/i.test(resp.title) || /\.png$/i.test(resp.title)))
+				if (/\.vsdx$/i.test(resp.title) || /\.gliffy$/i.test(resp.title) ||
+					(!this.ui.useCanvasForExport && binary))
 				{
 					var url = resp.downloadUrl + '&access_token=' + gapi.auth.getToken().access_token;
 					this.ui.convertFile(url, resp.title, resp.mimeType, this.extension, success, error);
@@ -653,27 +656,27 @@ DriveClient.prototype.getFile = function(id, success, error, readXml, readLibrar
 					else
 					{
 						this.loadRealtime(resp, mxUtils.bind(this, function(doc)
-				    	{
+					    	{
 							try
 							{
 								// Converts XML files to realtime including old realtime model
 								if (doc == null || doc.getModel() == null || doc.getModel().getRoot() == null ||
 									doc.getModel().getRoot().isEmpty() || (doc.getModel().getRoot().has('cells') &&
 									!doc.getModel().getRoot().has(DriveRealtime.prototype.diagramsKey)))
-					    		{
-					    			this.getXmlFile(resp, doc, success, error);
-					    		}
-					    		else
-					    		{
-					        		// XML not required here since the realtime model is not empty
-					    			success(new DriveFile(this.ui, null, resp, doc));
-					    		}
+						    		{
+						    			this.getXmlFile(resp, doc, success, error);
+						    		}
+						    		else
+						    		{
+						        		// XML not required here since the realtime model is not empty
+						    			success(new DriveFile(this.ui, null, resp, doc));
+						    		}
 							}
 							catch (e)
 							{
 								error(e);
 							}
-				    	}), error);
+					    	}), error);
 					}
 				}
 			}
@@ -762,6 +765,25 @@ DriveClient.prototype.getXmlFile = function(resp, doc, success, error, ignoreMim
 		}
 		else
 		{
+			if (/\.png$/i.test(resp.title))
+			{
+				var index = data.lastIndexOf(',');
+
+				if (index > 0)
+				{
+					var xml = this.ui.extractGraphModelFromPng(data.substring(index + 1));
+					
+					if (xml != null && xml.length > 0)
+					{
+						data = xml;
+					}
+					else
+					{
+						// TODO: Import PNG
+					}
+				}
+			}
+			
 			var file = new DriveFile(this.ui, data, resp, doc);
 	
 			// Checks if mime-type needs to be updated if the file is editable and no viewer app
@@ -842,13 +864,29 @@ DriveClient.prototype.saveFile = function(file, revision, success, error, noChec
 			// Updates saveDelay on drive file
 			var wrapper = function()
 			{
-	    		file.saveDelay = new Date().getTime() - t0;
-	    		success.apply(this, arguments);
+		    		file.saveDelay = new Date().getTime() - t0;
+		    		success.apply(this, arguments);
 			};
 			
-			this.executeRequest(this.createUploadRequest(file.getId(), meta,
-				file.getData(), revision || (file.desc.mimeType != this.mimeType &&
-				file.desc.mimeType != this.libraryMimeType)), wrapper, error);
+			var fn = mxUtils.bind(this, function(data, binary)
+			{
+				this.executeRequest(this.createUploadRequest(file.getId(), meta,
+					data, revision || (file.desc.mimeType != this.mimeType &&
+					file.desc.mimeType != this.libraryMimeType), binary),
+					wrapper, error);
+			});
+			
+			if (this.ui.useCanvasForExport && /(\.png)$/i.test(file.getTitle()))
+			{
+				this.ui.getEmbeddedPng(mxUtils.bind(this, function(data)
+				{
+					fn(data, true);
+				}), error, (this.ui.getCurrentFile() != file) ? file.getData() : null);
+			}
+			else
+			{
+				fn(file.getData(), false);
+			}
 		});
 		
 		// Indirection to generate thumbnails if enabled and supported
@@ -1037,7 +1075,7 @@ DriveClient.prototype.insertFile = function(title, data, folderId, success, erro
 		else if (allowRealtime)
 		{
 			this.loadRealtime(resp, mxUtils.bind(this, function(doc)
-	    	{
+		    	{
 				if (this.user != null)
 				{
 					var file = new DriveFile(this.ui, data, resp, doc);
@@ -1051,7 +1089,7 @@ DriveClient.prototype.insertFile = function(title, data, folderId, success, erro
 				{
 					error({message: mxResources.get('loggedOut')});
 				}
-	    	}), error);
+		    	}), error);
 		}
 		else
 		{
@@ -1152,34 +1190,42 @@ DriveClient.prototype.pickFile = function(fn, acceptAllFiles)
 				// Pseudo-hierarchical directory view, see
 				// https://groups.google.com/forum/#!topic/google-picker-api/FSFcuJe7icQ
 				var view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
-		        	.setParent('root')
-		        	.setIncludeFolders(true);
+			        	.setParent('root')
+			        	.setIncludeFolders(true);
 				
-				var view2 = new google.picker.DocsView();
+				var view2 = new google.picker.DocsView()
+					.setIncludeFolders(true);
 				
-				var view3 = new google.picker.DocsUploadView()
+				var view3 = new google.picker.DocsView()
+					.setEnableTeamDrives(true)
+					.setIncludeFolders(true);
+				
+				var view4 = new google.picker.DocsUploadView()
 					.setIncludeFolders(true);
 
 				if (!acceptAllFiles)
 				{
 					view.setMimeTypes(this.mimeTypes);
 					view2.setMimeTypes(this.mimeTypes);
+					view3.setMimeTypes(this.mimeTypes);
 				}
 				else
 				{
-					// Workaround for no files shown
-					view.setMimeTypes(this.mimeTypes + ',image/png,image/jpg,image/svg+xml,' +
-						'application/xml,text/plain,text/html');
+					view.setMimeTypes('*/*');
+					view2.setMimeTypes('*/*');
+					view3.setMimeTypes('*/*');
 				}
 				
 				this[name] = new google.picker.PickerBuilder()
 			        .setOAuthToken(this[name + 'Token'])
 			        .setLocale(mxLanguage)
 			        .setAppId(this.appId)
+			        .enableFeature(google.picker.Feature.SUPPORT_TEAM_DRIVES)
 			        .addView(view)
 			        .addView(view2)
-			        .addView(google.picker.ViewId.RECENTLY_PICKED)
 			        .addView(view3)
+			        .addView(google.picker.ViewId.RECENTLY_PICKED)
+			        .addView(view4)
 			        .setCallback(mxUtils.bind(this, function(data)
 			        {
 			        	if (data.action == google.picker.Action.PICKED ||
@@ -1197,7 +1243,6 @@ DriveClient.prototype.pickFile = function(fn, acceptAllFiles)
 
 			mxEvent.addListener(document, 'click', exit);
 			this[name].setVisible(true);
-			this.ui.movePickersToTop();
 		}));
 	}
 };
@@ -1252,62 +1297,51 @@ DriveClient.prototype.pickFolder = function(fn)
 					// Pseudo-hierarchical directory view, see
 					// https://groups.google.com/forum/#!topic/google-picker-api/FSFcuJe7icQ
 					var view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
-			        	.setParent('root')
-			        	.setIncludeFolders(true)
+						.setParent('root')
+						.setIncludeFolders(true)
 						.setSelectFolderEnabled(true)
-			        	.setMimeTypes('application/vnd.google-apps.folder');
+			        		.setMimeTypes('application/vnd.google-apps.folder');
 					
 					var view2 = new google.picker.DocsView()
-						.setIncludeFolders(true) 
+						.setIncludeFolders(true)
 						.setSelectFolderEnabled(true)
 						.setMimeTypes('application/vnd.google-apps.folder');
-				
+					
+					var view3 = new google.picker.DocsView()
+						.setIncludeFolders(true)
+						.setEnableTeamDrives(true)
+						.setSelectFolderEnabled(true)
+						.setMimeTypes('application/vnd.google-apps.folder');
+					
 					this[name] = new google.picker.PickerBuilder()
 						.setSelectableMimeTypes('application/vnd.google-apps.folder')
 				        .setOAuthToken(this[name + 'Token'])
 				        .setLocale(mxLanguage)
 				        .setAppId(this.appId)
+					    .enableFeature(google.picker.Feature.SUPPORT_TEAM_DRIVES)
 				        .addView(view)
 				        .addView(view2)
+				        .addView(view3)
 				        .addView(google.picker.ViewId.RECENTLY_PICKED)
 				        .setTitle(mxResources.get('pickFolder'))
 				        .setCallback(mxUtils.bind(this, function(data)
 				        {
-				        	if (data.action == google.picker.Action.PICKED ||
-				        		data.action == google.picker.Action.CANCEL)
-				        	{
-				        		mxEvent.removeListener(document, 'click', exit);
-				        	}
-				        	
-				        	this.folderPickerCallback(data);
+					        	if (data.action == google.picker.Action.PICKED ||
+					        		data.action == google.picker.Action.CANCEL)
+					        	{
+					        		mxEvent.removeListener(document, 'click', exit);
+					        	}
+					        	
+					        	this.folderPickerCallback(data);
 				        })).build();
 				}
 	
 				mxEvent.addListener(document, 'click', exit);
 				this[name].setVisible(true);
-				this.ui.movePickersToTop();
 			}));
 		});
 		
-		// Does not show picker if there are no folders in the root
-		this.executeRequest(gapi.client.drive.children.list({'folderId': 'root', 'maxResults': 1,
-			'q': 'trashed=false and mimeType=\'application/vnd.google-apps.folder\''}),
-			mxUtils.bind(this, function(res)
-		{
-			if (res == null || res.items == null || res.items.length == 0)
-			{
-				// Simulates a pick event
-				this.ui.spinner.stop();
-				fn({'action': google.picker.Action.PICKED, 'docs': [{'type': 'folder', 'id': 'root'}]});
-			}
-			else
-			{
-				showPicker();
-			}
-		}), mxUtils.bind(this, function(err)
-		{
-			showPicker();
-		}));
+		showPicker();
 	}
 };
 
@@ -1368,42 +1402,49 @@ DriveClient.prototype.pickLibrary = function(fn)
 				// Pseudo-hierarchical directory view, see
 				// https://groups.google.com/forum/#!topic/google-picker-api/FSFcuJe7icQ
 				var view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
-		        	.setParent('root')
-		        	.setIncludeFolders(true)
+			        	.setParent('root')
+			        	.setIncludeFolders(true)
 					.setMimeTypes(this.libraryMimeType + ',application/xml,text/plain,application/octet-stream');
-			
+				
 				var view2 = new google.picker.DocsView()
+		        		.setIncludeFolders(true)
 					.setMimeTypes(this.libraryMimeType + ',application/xml,text/plain,application/octet-stream');
 			
-				var view3 = new google.picker.DocsUploadView()
+				var view3 = new google.picker.DocsView()
+					.setEnableTeamDrives(true)
+					.setIncludeFolders(true)
+					.setMimeTypes(this.libraryMimeType + ',application/xml,text/plain,application/octet-stream');
+				
+				var view4 = new google.picker.DocsUploadView()
 					.setIncludeFolders(true);
 				
 			    this.libraryPicker = new google.picker.PickerBuilder()
 			        .setOAuthToken(this.libraryPickerToken)
 			        .setLocale(mxLanguage)
 			        .setAppId(this.appId)
+			        .enableFeature(google.picker.Feature.SUPPORT_TEAM_DRIVES)
 			        .addView(view)
 			        .addView(view2)
-			        .addView(google.picker.ViewId.RECENTLY_PICKED)
 			        .addView(view3)
+			        .addView(google.picker.ViewId.RECENTLY_PICKED)
+			        .addView(view4)
 			        .setCallback(mxUtils.bind(this, function(data)
 			        {
-			        	if (data.action == google.picker.Action.PICKED ||
-			        		data.action == google.picker.Action.CANCEL)
-			        	{
-			        		mxEvent.removeListener(document, 'click', exit);
-			        	}
-			        	
-			        	if (data.action == google.picker.Action.PICKED)
-			    		{
-			        		this.filePicked(data);
-			    		}
+				        	if (data.action == google.picker.Action.PICKED ||
+				        		data.action == google.picker.Action.CANCEL)
+				        	{
+				        		mxEvent.removeListener(document, 'click', exit);
+				        	}
+				        	
+				        	if (data.action == google.picker.Action.PICKED)
+				    		{
+				        		this.filePicked(data);
+				    		}
 			        })).build();
 			}
 			
 			mxEvent.addListener(document, 'click', exit);
 			this.libraryPicker.setVisible(true);
-			this.ui.movePickersToTop();
 		}));
 	}
 };

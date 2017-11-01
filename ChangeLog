@@ -1,3 +1,637 @@
+30-OCT-2017: 7.6.7
+
+- Ignores invalid sources in embed mode
+- Fixes auth flow in Trello Power-Up
+
+30-OCT-2017: 7.6.6
+
+- Uses mxGraph 3.7.6 beta 9
+- Always shows Google folder dialog
+
+28-OCT-2017: 7.6.5
+
+- Fixes possible NPE in legacy embed mode
+
+28-OCT-2017: 7.6.4
+
+- Adds vector handles
+- Fixes text style combo in Firefox
+- Fixes text flow after word wrap change
+- Uses mxGraph 3.7.6 beta 8
+
+26-OCT-2017: 7.6.3
+
+- Adds current style to CSV and text 
+- Uses mxGraph 3.7.6 beta 7
+
+25-OCT-2017: 7.6.2
+
+- Adds optional arguments for subclassers
+
+25-OCT-2017: 7.6.1
+
+- Fixes Google picker for certain file types
+- Fixes text entries in general sidebar
+- Uses mxGraph 3.7.6 beta 6
+
+24-OCT-2017: 7.6.0
+
+- Uses mxGraph 3.7.6 beta 5
+
+24-OCT-2017: 7.5.9
+
+- Uses mxGraph 3.7.6 beta 4
+
+23-OCT-2017: 7.5.8
+
+- Adds Team Drives support in GDriveConnector
+- Fixes bug in mockups sidebar
+
+22-OCT-2017: 7.5.7
+
+- Adds support for team drives in google picker
+- Removes image export after closing lightbox
+
+16-OCT-2017: 7.5.6
+
+- Adds IBM icons
+- Disables Confluence Cloud revision checks due to saveMacro bug
+
+10-OCT-2017: 7.5.5
+
+- Hides tooltips for page links
+- Fixes scrollwheel zooming with no scrollbars in chromeless mode
+- Uses mxGraph 3.7.6 beta 3
+
+09-OCT-2017: 7.5.4
+
+- Adds missing page option in insert link dialog
+- Fixes viewer event handling for links in labels
+
+06-OCT-2017: 7.5.3
+
+- Fixes Trello integration
+- Fixes image cropping dialog
+
+05-OCT-2017: 7.5.2
+
+- Ready for new Trello integration
+- Fixes for embed mode
+
+04-OCT-2017: 7.5.1
+
+- Updates Atlassian icons
+
+03-OCT-2017: 7.5.0
+
+- Updates Atlassian icons
+- Improvements for Lucidchart import
+- Adds toolbar and border URL parameter for chromeless mode
+
+29-SEP-2017: 7.4.9
+
+- Fixes ignored current page in window lightbox
+- Fixes cross-origin frame access in fallback
+
+28-SEP-2017: 7.4.8
+
+- Adds #P for URL parameters (beta)
+- Bypasses caches for proxy servlet
+- Uses mxGraph 3.7.6 beta 2
+- Checks existing storage file before rename
+
+26-SEP-2017: 7.4.7
+
+- Adds components for Trello Power-Up
+
+25-SEP-2017: 7.4.6
+
+- Improves Gliffy import
+- Removes drag and drop handlers in lightbox
+- Fixes selection state in Chrome after closing dialogs
+
+25-SEP-2017: 7.4.5
+
+- Improves Gliffy import
+
+22-SEP-2017: 7.4.4
+
+- Restores latest Dropbox SDK
+- Improves CORS headers configuration
+- Fixes ignored nav, highlight and page in tabbed lightbox for viewer
+
+19-SEP-2017: 7.4.3
+
+- Improvements for Trello integration
+
+19-SEP-2017: 7.4.2
+
+- Hard codes Dropbox SDK version to work around their bug
+
+18-SEP-2017: 7.4.1
+
+- Hides footer in embed mode
+- Restores feedback form in help menu
+
+18-SEP-2017: 7.4.0
+
+- Removes feedback form in help menu
+- Adds client-side image export in lightbox
+
+13-SEP-2017: 7.3.9
+
+- Fixes missing insert page tab
+
+12-SEP-2017: 7.3.8
+
+- Improvements to Gliffy import
+
+08-SEP-2017: 7.3.7
+
+- Uses mxGraph 3.7.6 beta 1
+- Fixes links on shapes in print output
+
+07-SEP-2017: 7.3.6
+
+- Fixes overridden paths for folding icons
+- Fixes subtree folding in viewer
+- Fixes disabled state for edit data action
+- Fixes footer plugin in chromeless mode
+- Adds CSS style for read-only status
+- Fixes possible editing for read-only files
+
+01-SEP-2017: 7.3.5
+
+- Improvements for Lucidchart import
+- Hides move icon in tree and flow layouts
+- Fixes collapsible action for multiple selection cells
+
+31-AUG-2017: 7.3.4
+
+- Adds event handling for tree and flow layouts
+
+31-AUG-2017: 7.3.3
+
+- Removes footer in Chrome App
+- Improvements for Lucidchart import
+- Fixes timing issue in number plugin
+
+31-AUG-2017: 7.3.2
+
+- Fixes special cases for line jumps
+
+30-AUG-2017: 7.3.1
+
+- Fixes folder dialog for inserting new Google Drive files
+- Adds support for PNG+XML files in Chrome, Firefox and Edge
+- Fixes tolerance for connection arrows on touch devices
+
+28-AUG-2017: 7.3.0
+
+- Fixes event handling for page links in labels
+- Fixes label for page links on shapes
+- Fixes folding in tree containers
+- Uses mxGraph 3.7.5
+
+25-AUG-2017: 7.2.9
+
+- Moves clickable label links to tooltip in edit mode
+
+25-AUG-2017: 7.2.8
+
+- Fixes open in new window for local exports
+- Fixes collapse/expand for containers
+- Uses mxGraph 3.7.5 beta 14
+
+24-AUG-2017: 7.2.7
+
+- Fixes file usage stats
+
+24-AUG-2017: 7.2.6
+
+- Improvements for Lucidchart import
+- Fixes possible NPEs
+
+24-AUG-2017: 7.2.5
+
+- Fixes possible NPE
+
+24-AUG-2017: 7.2.4
+
+- Adds mindmaps and orgcharts in Advanced sidebar (beta)
+- Fixes page ID after import in Confluence Cloud add-on
+
+24-AUG-2017: 7.2.3
+
+- Fixes reset of current styles
+
+24-AUG-2017: 7.2.2
+
+- Adds autosave for Trello files
+
+23-AUG-2017: 7.2.1
+
+- Adds support for Trello attachments
+
+23-AUG-2017: 7.2.0
+
+- Adds support for line jumps (beta)
+- Improvements for Lucidchart import
+- Adds usage stats for actions
+- Uses mxGraph 3.7.5 beta 13
+
+22-AUG-2017: 7.1.10
+
+- Fixes transistor icon set
+
+21-AUG-2017: 7.1.9
+
+- Adds persistent autosave setting in Electron App
+- Adds File, Page Setup and Publish in Electron/Chrome App
+- Fixes keyboard shortcut labels on Mac
+- Changes keyboard shortcuts for connection points/arrows
+
+18-AUG-2017: 7.1.8
+
+- Fixes bounding box margins for vertical labels
+- Uses mxGraph 3.7.5 beta 12
+
+18-AUG-2017: 7.1.7
+
+- Webapp opens local files in new window
+- Fixes flipped, non-projected anchors
+- Uses mxGraph 3.7.5 beta 11
+- Changes download links
+
+17-AUG-2017: 7.1.6
+
+- Improvements for Lucidchart import
+- Uses mxGraph 3.7.5 beta 11
+- Fixes possible NPE in custom handles
+
+17-AUG-2017: 7.1.5
+
+- Uses mxGraph 3.7.5 beta 10
+- Fixes custom handle positions for turned shapes
+- Fixes image export for clipart in Electron App
+- Adds close in file menu for Electron/Chrome App
+- Repositions inline dialogs if window is resized
+- Removes indirection for saving PDF in Electron App
+- Adds export in library dialog for Chrome App
+
+16-AUG-2017: 7.1.4
+
+- Adds footer for Desktop Apps Facebook post
+
+16-AUG-2017: 7.1.3
+
+- Uses mxGraph 3.7.5 beta 9
+- Uses retina icons for social media footers
+
+16-AUG-2017: 7.1.2
+
+- Fixes possible NPE in mxShapeBasicRectCallout shape
+
+16-AUG-2017: 7.1.1
+
+- Disables drafts in Confluence Cloud add-on
+- Uses mxGraph 3.7.5 beta 9
+- Fixes label positions, adds callout shape in general sidebar
+
+14-AUG-2017: 7.1.0
+
+- Improves Lucidchart import
+- Improves Gliffy import
+- Uses mxGraph 3.7.5 beta 8
+- Fixes ignored horizontal/vertical flip for connection points
+
+11-AUG-2017: 7.0.9
+
+- Fixes path to clipart images for SVG export in Chrome App
+- Adds perimeter for parallelogram, trapezoid, step and hexagon
+
+11-AUG-2017: 7.0.8
+
+- Fixes error handling in Confluence Cloud add-on
+
+10-AUG-2017: 7.0.7
+
+- Adds anonymize plugin (p=anon)
+
+09-AUG-2017: 7.0.6
+
+- Conf Cloud license changes
+- Fixes for Perimeters
+
+09-AUG-2017: 7.0.5
+
+- Uses mxGraph 3.7.5 beta 7
+- Fixes pen events for Chrome on Windows
+- Adds preview for clipboard in save image dialog
+- Enables drafts in Confluence Cloud add-on
+
+08-AUG-2017: 7.0.4
+
+- Improvements to Gliffy import
+- Fixes remember option for image resize dialog
+
+07-AUG-2017: 7.0.3
+
+- Adds cropping for data URIs in edit image dialog
+- Uses mxGraph 3.7.5 beta 6
+- Adds filled edge shape in basic sidebar
+- Fixes possible NPE, undefined function in Lucidchart Import
+- Fixes error handling in PlantUML add-on
+
+06-AUG-2017: 7.0.2
+
+- Improvements to Gliffy import
+- Uses filename for print preview title
+
+04-AUG-2017: 7.0.1
+
+- Improvements to Gliffy import
+- Improvements to Lucidchart import
+- Fixes PlantUML macro dialog
+
+03-AUG-2017: 7.0.0
+
+- Improvements to Gliffy import
+- Improvements to Lucidchart import 
+- Sent semantic versioning on holiday
+
+02-AUG-2017: 6.9.9
+
+- Fixes paste from Lucidchart
+
+31-JUL-2017: 6.9.8
+
+- Gliffy import improvements
+
+27-JUL-2017: 6.9.7
+
+- Adds links to reviews in free add-ons
+- Fixes preview in PlantUML add-on
+
+26-JUL-2017: 6.9.6
+
+- Switches to Google Cloud SDK
+- Adds fishbone diagram templates in business section
+
+24-JUL-2017: 6.9.5
+
+- Fixes anchor links in lightbox for viewer
+- Fixes event state for page links in labels
+
+24-JUL-2017: 6.9.4
+
+- Fixes hyperlinks in viewer
+
+24-JUL-2017: 6.9.3
+
+- Uses mxGraph 3.7.5 beta 5
+- Add experimental support for bridges in dev mode only
+
+24-JUL-2017: 6.9.2
+
+- Add experimental support for bridges
+- Adds fixes to VSDX export
+- Minor UI fixes
+
+19-JUL-2017: 6.9.1
+
+- Adds open button for spreadsheets, videos, photos, maps in GDriveConnector
+- Fixes import of multiple pages in Lucidchart files
+
+18-JUL-2017: 6.9.0
+
+- Adds import tile in splash screen
+- Adds social media sharing in footer
+- Uses mxGraph 3.7.5 beta 4
+- Fixes Extras, Tags and Autosave in Embed mode
+
+18-JUL-2017: 6.8.18
+
+- Ctrl+drop for images shows size dialog to reset default
+- Adds dialog before unloading modified page in embed mode
+
+17-JUL-2017: 6.8.17
+
+- Adds dialog for importing large images
+- Fixes sorting of properties in metadata dialog for IE 11
+- Fixes handling of lineHeight in IE 11
+
+16-JUL-2017: 6.8.16
+
+- Makes ref optional in value dialog for GitHub
+- Adds undoable background color, image and page format changes
+- Uses mxGraph 3.7.5 beta 3
+
+12-JUL-2017: 6.8.15
+
+- Fixes deleted transparent labels with spaces
+- Enables resize of containers with stack layout
+- Adds links option in Confluence Cloud add-on
+
+11-JUL-2017: 6.8.14
+
+- Fixes VSDX export for non-numeric IDs
+- Fixes drag and drop to splash screen
+
+10-JUL-2017: 6.8.13
+
+- Adds Alt+Click to select cells behind cells
+- Uses mxGraph 3.7.5 beta 2
+
+07-JUL-2017: 6.8.12
+
+- Updated translations
+- Fixes minor bugs in Connect add-ons
+
+06-JUL-2017: 6.8.11
+
+- Changes initial footer link to video
+
+03-JUL-2017: 6.8.10
+
+- Uses mxGraph 3.7.5 beta 1
+
+29-JUN-2017: 6.8.9
+
+- Fixes execution order and ignored state parameter
+
+29-JUN-2017: 6.8.8
+
+- Updates translations
+- Disables VSDX export in IE11-
+- Fixes VSDX export in Safari
+- Adds larger thumbnails for Google Drive
+- Adds VSDX export (beta) in Chrome App
+
+28-JUN-2017: 6.8.7
+
+- Updates translations
+- Uses mxGraph 3.7.4
+
+26-JUN-2017: 6.8.6
+
+- Fixes save servlet, local file save in MS Edge
+- Removes echo request for save of local data to cloud
+
+21-JUN-2017: 6.8.5
+
+- Removes max-height for Confluence Cloud viewer
+
+20-JUN-2017: 6.8.4
+
+- Adds crossbar shape
+- Adds edit button configuration
+- Uses new quick start video
+- Fixes print dialog for lightbox in scrolled document
+- Uses mxGraph 3.7.3 beta 13
+
+16-JUN-2017: 6.8.3
+
+- Minor VSDX export menu change
+
+15-JUN-2017: 6.8.2
+
+- Fixes VSDX export to cloud
+
+15-JUN-2017: 6.8.1
+
+- Adds page formats, uses inch units
+- Fixes logout for OneDrive picker
+- Uses mxGraph 3.7.3 beta 12
+
+14-JUN-2017: 6.8.0
+
+- Adds support for OneDrive for Business
+
+13-JUN-2017: 6.7.11
+
+- Fixes possible NPE in DriveFile
+- Fixes Document Read-Only error in Google Drive
+- Fixes OneDrive button in LinkDialog
+- Adds more UML relation notations
+- Inserts custom libraries after scratchpad
+
+12-JUN-2017: 6.7.10
+
+- Fixes Java compliance issue in Gliffy import
+
+12-JUN-2017: 6.7.9
+
+- Adds css, default styles, libraries to Editor.configure
+- Moves persistent settings to EditorUi.init
+- Fixes image export for (var)phi in ASCIIMathML
+
+08-JUN-2017: 6.7.8
+
+- Fixes saving local files in MS Edge
+- Fixes binary after text export in Safari
+- Fixes title for offline iOS homescreen app
+
+06-JUN-2017: 6.7.7
+
+- Fixes broken links in cache.manifest
+
+06-JUN-2017: 6.7.6
+
+- Adds VSDX export in online webapp
+
+06-JUN-2017: 6.7.5
+
+- Fixes links in labels for lightbox on touch devices
+- Adds links to pages
+- Adds zoom option for viewer in Confluence Connect
+
+05-JUN-2017: 6.7.4
+
+- Fixes overridden rounded style for non-rounded shapes
+- Adds defaultVertexStyle/defaultEdgeStyle in Editor.configure
+- Adds replay plugin
+
+03-JUN-2017: 6.7.3
+
+- Updates Gliffy translations to add Flowchart v2 library
+- Adds edge group support to vsdx export
+- Updates Google Cloud Platform icons
+
+31-MAY-2017: 6.7.2
+
+- Adds Atlassian shapes
+
+30-MAY-2017: 6.7.1
+
+- Adds viewer lightbox option in Confluence Connect
+- Uses mxGraph 3.7.3 beta 9
+
+29-MAY-2017: 6.7.0
+
+- Adds viewer toolbar config for Confluence Connect
+- Enables video and source tags in labels and tooltips
+- Fixes reset of edge styles in CSV import
+- Uses mxGraph 3.7.3 beta 8
+
+25-MAY-2017: 6.6.5
+
+- Adds print option in lightbox
+- Moves insert to arrange menu
+
+24-MAY-2017: 6.6.4
+
+- Fixes possible data loss for back button
+- Enables OneDrive support on iOS
+
+22-MAY-2017: 6.6.3
+
+- vsdx export improvements
+
+19-MAY-2017: 6.6.2
+
+- Adds trees plugin
+- Fixes text preview, custom handles with math
+- Uses mxGraph 3.7.3 beta 7
+
+17-MAY-2017: 6.6.1
+
+- Fixes libs=aws2 URL parameter
+- Uses mxGraph 3.7.3 beta 6
+
+16-MAY-2017: 6.6.0
+
+- Adds Venn diagram templates
+- Starts .vsdx export functionality
+- Improvements and bug fixes for Electron build
+- Fixes for Gliffy importer
+- Adds autosave for libraries in Chrome App
+
+13-MAY-2017: 6.5.10
+
+- Fixes case sensitivity issue for template names and folders
+
+12-MAY-2017: 6.5.9
+
+- Adds export as URL in Chrome App
+- Adds drag and drop for all file formats in Sidebar and Library dialog
+- Fixes handling of invalid files after close with realtime
+- Adds offline app status icon for cached state
+- Removes standalone mode to fix offline iOS home screen apps
+- Redirects PDF export to print action when offline
+- Fixes text preview for resize with custom handles
+- Improvements for small mobile screens
+- Forces HTTPS for offline app
+- Fixes partial rectangles in Basic palette
+- Uses mxGraph 3.7.3 beta 5
+
+08-MAY-2017: 6.5.8
+
+- Adds .vssx stencil import
+- Adds square, circle, partial rectangles in sidebar
+- Adds identity configuration for CSV import
+- Uses mxGraph 3.7.3 beta 4
+
 29-APR-2017: 6.5.7
 
 - Fixes default and button labels for lost changes dialog

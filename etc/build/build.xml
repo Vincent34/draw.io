@@ -6,17 +6,17 @@
 	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="${jscompiler}" />
 
 	<target name="merge">
-    	<concat destfile="${basedir}/../../build/shapes.js" fixlastline="yes" append="no">
-    		<fileset dir="${war.dir}/shapes" includes="**/*.js"/>
-    		<fileset dir="${war.dir}/stencils" includes="**/*.js"/>
-    	</concat>
+	    	<concat destfile="${basedir}/../../build/shapes.js" fixlastline="yes" append="no">
+	    		<fileset dir="${war.dir}/shapes" includes="**/*.js"/>
+	    		<fileset dir="${war.dir}/stencils" includes="**/*.js"/>
+	    	</concat>
     	
 		<echo file="${war.dir}/stencils.xml" append="false"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]>${line.separator}</echo>
 		<echo file="${war.dir}/stencils.xml" append="true"><![CDATA[<stencils>]]>${line.separator}</echo>
-    	<concat destfile="${war.dir}/stencils.xml" fixlastline="yes" append="yes">
-    		<fileset dir="${war.dir}/shapes" includes="**/*.xml"/>
-    		<fileset dir="${war.dir}/stencils" includes="**/*.xml"/>
-    	</concat>
+	    	<concat destfile="${war.dir}/stencils.xml" fixlastline="yes" append="yes">
+	    		<fileset dir="${war.dir}/shapes" includes="**/*.xml"/>
+	    		<fileset dir="${war.dir}/stencils" includes="**/*.xml"/>
+	    	</concat>
     	<echo file="${war.dir}/stencils.xml" append="true"><![CDATA[</stencils>]]></echo>
 
 		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${war.dir}/js/shapes.min.js">
@@ -32,9 +32,9 @@
 		<echo file="${war.dir}/cache.manifest" append="false">CACHE MANIFEST${line.separator}${line.separator}</echo>
 		<echo file="${war.dir}/cache.manifest" append="true"># THIS FILE WAS GENERATED. DO NOT MODIFY!${line.separator}</echo>
 		<echo file="${war.dir}/cache.manifest" append="true"># ${time.stamp}${line.separator}${line.separator}</echo>
-    	<concat destfile="${war.dir}/cache.manifest" fixlastline="yes" append="true">
-    		<fileset dir="${basedir}" includes="cache.txt"/>
-    	</concat>
+	    	<concat destfile="${war.dir}/cache.manifest" fixlastline="yes" append="true">
+	    		<filelist dir="${basedir}" files="cache.txt"/>
+	    	</concat>
     	
 		<delete dir="${basedir}/../../build"/>
 	</target>
@@ -42,25 +42,37 @@
 	<target name="app" depends="merge">
 		<delete file="${basedir}/.tmp0.js"/>
 		<echo file="${basedir}/.tmp0.js">
-			var mxBasePath = 'https://www.draw.io/mxgraph/';
-			var mxLoadStylesheets = false;
+			window.STENCIL_PATH = window.STENCIL_PATH || 'https://www.draw.io/stencils';
+			window.SHAPES_PATH = window.SHAPES_PATH || 'https://www.draw.io/shapes';
+			window.mxBasePath = window.mxBasePath || 'https://www.draw.io/mxgraph/';
+			window.mxLoadStylesheets = window.mxLoadStylesheets || false;
 		</echo>
 
 		<delete file="${basedir}/.tmp1.js"/>
 		<copy file="${war.dir}/styles/default.xml" tofile="${basedir}/.tmp1.xml" overwrite="true"/>
 		<replaceregexp file="${basedir}/.tmp1.xml" match="${line.separator}" flags="g" replace=""/>
 		<replaceregexp file="${basedir}/.tmp1.xml" match="\t" flags="g" replace=""/>
-		<replaceregexp file="${basedir}/.tmp1.xml" match="'" replace="\\\\'" byline="true"/>
+		<replaceregexp file="${basedir}/.tmp1.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
 		
 		<delete file="${basedir}/Graph-Stylesheet.js"/>
 		<echo file="${basedir}/Graph-Stylesheet.js">Graph.prototype.defaultThemes[Graph.prototype.defaultThemeName] = mxUtils.parseXml('</echo>
 		<concat destfile="${basedir}/Graph-Stylesheet.js" fixlastline="no" append="true">
-			<filelist dir="${basedir}">
-				<file name=".tmp1.xml" />
-			</filelist>
-    	</concat>
+			<filelist dir="${basedir}" files=".tmp1.xml"/>
+    		</concat>
 		<echo file="${basedir}/Graph-Stylesheet.js" append="true">').documentElement;</echo>
 
+		<delete file="${basedir}/.tmp2.js"/>
+		<copy file="${war.dir}/resources/dia.txt" tofile="${basedir}/.tmp2.xml" overwrite="true"/>
+		<replaceregexp file="${basedir}/.tmp2.xml" match="${line.separator}" flags="g" replace="\\\\n"/>
+		<replaceregexp file="${basedir}/.tmp2.xml" match="'" flags="g" replace="\\\\'" byline="true"/>
+		
+		<delete file="${basedir}/Graph-Resources.js"/>
+		<echo file="${basedir}/Graph-Resources.js">mxResources.parse('</echo>
+		<concat destfile="${basedir}/Graph-Resources.js" fixlastline="no" append="true">
+			<filelist dir="${basedir}" files=".tmp2.xml"/>
+    		</concat>
+		<echo file="${basedir}/Graph-Resources.js" append="true">');</echo>
+		
 		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/grapheditor.min.js">
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
@@ -84,6 +96,7 @@
 				<file name="Sidebar-ArchiMate.js" />
 				<file name="Sidebar-ArchiMate3.js" />
 				<file name="Sidebar-Arrows2.js" />
+				<file name="Sidebar-Atlassian.js" />
 				<file name="Sidebar-AWS.js" />
 				<file name="Sidebar-AWS3.js" />
 				<file name="Sidebar-AWS3D.js" />
@@ -100,6 +113,7 @@
 				<file name="Sidebar-Flowchart.js" />
 				<file name="Sidebar-GCP.js" />
 				<file name="Sidebar-Gmdl.js" />
+				<file name="Sidebar-IBM.js" />
 				<file name="Sidebar-Ios.js" />
 				<file name="Sidebar-Ios7.js" />
 				<file name="Sidebar-LeanMapping.js" />
@@ -114,23 +128,10 @@
 				<file name="Sidebar-WebIcons.js" />
 			</sources>
 		</jscomp>
-
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/base-viewer.min.js">
-			<sources dir="${basedir}">
-				<file name=".tmp0.js"/>
-			</sources>
-			
-			<sources dir="${war.dir}/js/spin">
-				<file name="spin.min.js" />
-			</sources>
-				
-			<sources dir="${war.dir}/js/sanitizer">
-				<file name="sanitizer.min.js"/>
-			</sources>
-
+		
+		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/client.min.js">
 			<sources dir="${war.dir}/js/deflate">
 				<file name="base64.js" />
-				<file name="pako.min.js" />
 			</sources>
 
 			<sources dir="${war.dir}/js/diagramly">
@@ -144,7 +145,19 @@
 			<sources dir="${basedir}/../mxgraph">
 				<file name="mxClient.js" />
 			</sources>
+			
+			<sources dir="${war.dir}/js/jscolor">
+				<file name="jscolor.js" />
+			</sources>
+		</jscomp>
 
+		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/.tmp0.min.js">
+			<sources dir="${basedir}">
+				<file name=".tmp0.js"/>
+			</sources>
+		</jscomp>
+			
+		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/.tmp1.js">
 			<sources dir="${grapheditor.dir}">
 				<file name="Editor.js" />
 				<file name="EditorUi.js" />
@@ -159,9 +172,11 @@
 				<file name="Editor.js" />
 				<file name="EditorUi.js" />
 				<file name="Pages.js" />
+				<file name="Trees.js" />
 			</sources>
 					
 			<sources dir="${basedir}">
+				<file name="Graph-Resources.js" />
 				<file name="Graph-Stylesheet.js" />
 			</sources>
 
@@ -170,14 +185,19 @@
 			</sources>
 		</jscomp>
 		
-		<delete file="${basedir}/.tmp1.xml"/>
+		<concat destfile="${basedir}/base-viewer.min.js" fixlastline="yes" append="no">
+			<filelist dir="${basedir}" files=".tmp0.min.js"/>
+			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
+			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
+			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
+			<filelist dir="${basedir}" files="client.min.js,.tmp1.js"/>
+    		</concat>
 
-		<echo file="${basedir}/.tmp1.js">
+		<echo file="${basedir}/.tmp2.js">
 			(function()
 			{
 				Editor.initMath();
 				GraphViewer.initCss();
-				mxStencilRegistry.dynamicLoading = false;
 				
 				if (window.onDrawioViewerLoad != null)
 				{
@@ -190,56 +210,32 @@
 			})();
 		</echo>
 		
-		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${war.dir}/js/viewer.min.js">
+		<jscomp compilationLevel="simple" forceRecompile="true" debug="false" output="${basedir}/.tmp2.min.js">
 			<sources dir="${basedir}">
-				<file name="base-viewer.min.js"/>
-			</sources>
-
-			<sources dir="${basedir}">
-				<file name=".tmp1.js"/>
+				<file name=".tmp2.js"/>
 			</sources>
 		</jscomp>
 		
+		<concat destfile="${war.dir}/js/viewer.min.js" fixlastline="yes" append="no">
+			<filelist dir="${basedir}" files="base-viewer.min.js,.tmp2.min.js"/>
+    		</concat>
+
 		<delete file="${basedir}/.tmp0.js"/>
+		<delete file="${basedir}/.tmp0.min.js"/>
 		<delete file="${basedir}/.tmp1.js"/>
+		<delete file="${basedir}/.tmp2.js"/>
+		<delete file="${basedir}/.tmp2.min.js"/>
+		<delete file="${basedir}/.tmp1.xml"/>
+		<delete file="${basedir}/.tmp2.xml"/>
 
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/base.min.js">
-			<sources dir="${war.dir}/js/spin">
-				<file name="spin.min.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/sanitizer">
-				<file name="sanitizer.min.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/deflate">
-				<file name="pako.min.js" />
-				<file name="base64.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="Init.js" />
-			</sources>
-
-			<sources dir="${grapheditor.dir}">
-				<file name="Init.js" />
-			</sources>
-
-			<sources dir="${basedir}/../mxgraph">
-				<file name="mxClient.js" />
-			</sources>
-			
-			<sources dir="${basedir}">
-				<file name="grapheditor.min.js"/>
-				<file name="sidebar.min.js"/>
-			</sources>
-
+		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/.tmp1.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="DrawioFile.js" />
 				<file name="LocalFile.js" />
 				<file name="LocalLibrary.js" />
 				<file name="StorageFile.js" />
 				<file name="StorageLibrary.js" />
+				<file name="UrlLibrary.js" />
 				<file name="Dialogs.js" />
 				<file name="Editor.js" />
 				<file name="EditorUi.js" />
@@ -247,12 +243,20 @@
 				<file name="App.js" />
 				<file name="Menus.js" />
 				<file name="Pages.js" />
+				<file name="Trees.js" />
 			</sources>
 				
 			<sources dir="${basedir}">
 				<file name="Graph-Stylesheet.js" />
 			</sources>
 		</jscomp>
+			
+		<concat destfile="${basedir}/base.min.js" fixlastline="yes" append="no">
+			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
+			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
+			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
+			<filelist dir="${basedir}" files="client.min.js,grapheditor.min.js,sidebar.min.js,.tmp1.js"/>
+    		</concat>
 
 		<loadfile property="version" srcFile="../../VERSION"/>
 		<replace file="${basedir}/base.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
@@ -263,43 +267,26 @@
 			</sources>
 		</jscomp>
 		
-		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${war.dir}/js/app.min.js">
-			<sources dir="${war.dir}/js/spin">
-				<file name="spin.min.js" />
+		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${war.dir}/js/vsdx.min.js">
+			<sources dir="${war.dir}/js/diagramly/vsdx">
+				<file name="VsdxExport.js" />
+				<file name="mxVsdxCanvas2D.js" />
 			</sources>
-
-			<sources dir="${war.dir}/js/sanitizer">
-				<file name="sanitizer.min.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/deflate">
-				<file name="pako.min.js" />
-				<file name="base64.js" />
-			</sources>
-
-			<sources dir="${war.dir}/js/diagramly">
-				<file name="Init.js" />
-			</sources>
-
-			<sources dir="${grapheditor.dir}">
-				<file name="Init.js" />
-			</sources>
-
-			<sources dir="${basedir}/../mxgraph">
-				<file name="mxClient.js" />
-			</sources>
-
-			<sources dir="${basedir}">
-				<file name="grapheditor.min.js"/>
-				<file name="sidebar.min.js"/>
-			</sources>
-
+		</jscomp>
+		<concat destfile="${war.dir}/js/vsdx.min.js" fixlastline="yes" append="yes">
+    		<fileset dir="${war.dir}/js/jszip" includes="**/*.min.js"/>
+    	</concat>
+		
+		<delete file="${basedir}/.tmp1.js"/>
+		
+		<jscomp compilationLevel="simple" debug="false" forceRecompile="true" output="${basedir}/.tmp1.js">
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="DrawioFile.js" />
 				<file name="LocalFile.js" />
 				<file name="LocalLibrary.js" />
 				<file name="StorageFile.js" />
 				<file name="StorageLibrary.js" />
+				<file name="UrlLibrary.js" />
 				<file name="Dialogs.js" />
 				<file name="Editor.js" />
 				<file name="EditorUi.js" />
@@ -318,7 +305,6 @@
 			<sources dir="${war.dir}/js/diagramly">
 				<file name="DrawioClient.js" />
 				<file name="DrawioUser.js" />
-				<file name="UrlLibrary.js" />
 				<file name="DriveRealtime.js" />
 				<file name="RealtimeMapping.js" />
 				<file name="DriveFile.js" />
@@ -333,6 +319,9 @@
 				<file name="GitHubFile.js" />
 				<file name="GitHubLibrary.js" />
 				<file name="GitHubClient.js" />
+				<file name="TrelloFile.js" />
+				<file name="TrelloLibrary.js" />
+				<file name="TrelloClient.js" />
 				<file name="ChatWindow.js" />
 			</sources>
 			
@@ -340,14 +329,25 @@
 				<file name="App.js" />
 				<file name="Menus.js" />
 				<file name="Pages.js" />
+				<file name="Trees.js" />
 			</sources>
 		</jscomp>
-		
+
+		<concat destfile="${war.dir}/js/app.min.js" fixlastline="yes" append="no">
+			<filelist dir="${war.dir}/js/spin" files="spin.min.js"/>
+			<filelist dir="${war.dir}/js/sanitizer" files="sanitizer.min.js"/>
+			<filelist dir="${war.dir}/js/deflate" files="pako.min.js"/>
+			<filelist dir="${basedir}" files="client.min.js,grapheditor.min.js,sidebar.min.js,.tmp1.js"/>
+    		</concat>
+
 		<replace file="${war.dir}/js/app.min.js" token="@DRAWIO-VERSION@" value="${version}"/>
 
 		<delete file="${basedir}/Graph-Stylesheet.js"/>
+		<delete file="${basedir}/Graph-Resources.js"/>
 		<delete file="${basedir}/grapheditor.min.js"/>
 		<delete file="${basedir}/sidebar.min.js"/>
+		<delete file="${basedir}/client.min.js"/>
+		<delete file="${basedir}/.tmp1.js"/>
 	</target>
 
 	<target name="all" depends="app">

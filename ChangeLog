@@ -1,3 +1,187 @@
+23-JAN-2018: 8.0.2
+
+- Fixes constrained size change in arrange panel
+- Removes Dropbox and GitHub from splash screen
+- Handles empty string for image style
+- Adds workaround for dialog clipping
+- Uses mxGraph 3.9.1 beta 1
+
+19-JAN-2018: 8.0.1
+
+- Fixes ChangePageSetup
+- Uses mxGraph 3.9.0
+
+17-JAN-2018: 8.0.0
+
+- New Google repository structure
+- Uses Java 1.8
+
+16-JAN-2018: 7.9.8
+
+- Adds dark theme (beta)
+- Uses mxGraph 3.8.1 beta 11
+
+12-JAN-2018: 7.9.7
+
+- Disables http/https redirects
+
+12-JAN-2018: 7.9.6
+
+- Gliffy import improvements
+- Adds fontCss configuration to SVG export
+- Uses mxGraph 3.8.1 beta 10
+
+04-JAN-2018: 7.9.5
+
+- Fixes bug with current desktop app launcher
+
+04-JAN-2018: 7.9.4
+
+- Adds Extras, Plugins in desktop app
+- Adds command line arguments in desktop app
+- Fixes images in SVG export preview
+- Uses mxGraph 3.8.1 beta 8
+- Adds table option in insert text dialog
+- Fixes text formatting for input selection
+
+02-JAN-2018: 7.9.3
+
+- Workaround for null variable in Jira Connect
+- Uses mxGraph 3.8.1 beta 6
+
+31-DEC-2017: 7.9.2
+
+- Improves app icons for Android
+
+31-DEC-2017: 7.9.1
+
+- Uses round app icon for Android
+- Applies editing value before selecting page
+
+29-DEC-2017: 7.9.0
+
+- Removes search.xml from offline manifest
+
+29-DEC-2017: 7.8.9
+
+- Replaces search.xml with inline data
+
+21-DEC-2017: 7.8.8
+
+- Deletes transparent groups with no remaining cells
+- Fixes refresh of straight edge handles
+- Adds terminal points in Arrange tab
+- Uses mxGraph 3.8.1 beta 5
+
+19-DEC-2017: 7.8.7
+
+- Uses mxGraph 3.8.1 beta 4
+
+15-DEC-2017: 7.8.6
+
+- Internal translation update
+
+14-DEC-2017: 7.8.5
+
+- Uses mxGraph 3.8.1 beta 3
+- Uses relative path for templates
+- Adds configVersion to force reset of configuration
+
+05-DEC-2017: 7.8.4
+
+- Fixes font rendering in library dialog
+- Adds move subtree handle for tree containers
+- Fixes special cases for font size changes
+- Adds fixes for older versions of IE
+
+04-DEC-2017: 7.8.3
+
+- Improves handling of fontsize in format panel
+- Hides link hint for edges while moving points
+- Improves loop routing with control points
+- Adds remove option for links
+- Uses mxGraph 3.8.1 beta 2
+
+03-DEC-2017: 7.8.2
+
+- Adds select descendants for cells with outgoing edges
+- Adds defaults for insert from custom library
+- Adds search of metadata in find dialog
+- Enables export URL for external domains
+- Adds custom libraries to shape search index
+- Uses mxGraph 3.8.1 beta 1
+
+01-DEC-2017: 7.8.1
+
+- Fixes Confluence Cloud revision history diagram display
+
+30-NOV-2017: 7.8.0
+
+- Uses mxGraph 3.8.0
+
+29-NOV-2017: 7.7.8
+
+- Removes dashed borders for editing paragraphs
+
+28-NOV-2017: 7.7.7
+
+- Adds Sitemap sidebar
+- Moves double border shapes to Misc sidebar
+- Enables custom libraries in Trello Power-Up
+- Fixes resize vertex with touch events
+- Uses mxGraph 3.7.7 beta 2
+
+27-NOV-2017: 7.7.6
+
+- Removes Trello option from splash screen (use Power-Up)
+- Fixes import of SVG with no width, height and viewbox
+- Adds undo for global shadow switch
+- Uses mxGraph 3.7.7 beta 1
+- Fixes select after paste
+
+24-NOV-2017: 7.7.5
+
+- Even faster startup time for offline app
+- Fixes cache manifest for offline app
+
+24-NOV-2017: 7.7.4
+
+- Uses mxGraph 3.7.6
+- Checks existing filename in Trello Power-Up
+- Adds root dialog for cancel in Google picker
+- Faster startup time for offline app
+- Validates page format input
+
+22-NOV-2017: 7.7.3
+
+- Improves Gliffy importer
+
+20-NOV-2017: 7.7.2
+
+- Fixes stack layout and adds styles
+- Uses mxGraph 3.7.6 beta 10
+
+16-NOV-2017: 7.7.1
+
+- Adds switches for SVG shadow
+- Fixes tags dialog size
+- Fixes action states
+
+15-NOV-2017: 7.7.0
+
+- Fixes alt+mousewheel in lightbox mode
+
+15-NOV-2017: 7.6.9
+
+- Adds predefined filters for Trello picker
+- Fixes picker for GDriveConnector and Google Docs Add-on
+- Fixes UTF8 strings in imported SVG images
+- Adds context menu for links in hints
+
+13-NOV-2017: 7.6.8
+
+- Updates to latest AWS stencils
+
 30-OCT-2017: 7.6.7
 
 - Ignores invalid sources in embed mode
@@ -21,7 +205,7 @@
 
 26-OCT-2017: 7.6.3
 
-- Adds current style to CSV and text 
+- Adds current style to CSV and text
 - Uses mxGraph 3.7.6 beta 7
 
 25-OCT-2017: 7.6.2

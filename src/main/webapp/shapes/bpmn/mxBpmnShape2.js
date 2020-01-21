@@ -38,6 +38,41 @@ function mxBpmnShape(bounds, fill, stroke, strokewidth)
  */
 mxUtils.extend(mxBpmnShape, mxShape);
 
+mxBpmnShape.prototype.customProperties = [
+	{name: 'symbol', dispName: 'Event', type: 'enum', defVal:'general', 
+		enumList: [{val: 'general', dispName: 'General'}, 
+				   {val: 'message', dispName: 'Message'}, 
+				   {val: 'timer', dispName: 'Timer'}, 
+				   {val: 'escalation', dispName: 'Escalation'}, 
+				   {val: 'conditional', dispName: 'Conditional'}, 
+				   {val: 'link', dispName: 'Link'}, 
+				   {val: 'error', dispName: 'Error'}, 
+				   {val: 'cancel', dispName: 'Cancel'}, 
+				   {val: 'compensation', dispName: 'Compensation'}, 
+				   {val: 'signal', dispName: 'Signal'}, 
+				   {val: 'multiple', dispName: 'Multiple'}, 
+				   {val: 'parallelMultiple', dispName: 'Parallel Multiple'}, 
+				   {val: 'terminate', dispName: 'Terminate'}, 
+				   {val: 'exclusiveGw', dispName: 'Exclusive Gw'}, 
+				   {val: 'parallelGw', dispName: 'Parallel Gw'}, 
+				   {val: 'complexGw', dispName: 'Complex Gw'}]
+	},
+	{name: 'outline', dispName: 'Event Type', type: 'enum', defVal:'standard', 
+		enumList: [{val: 'standard', dispName: 'Standard'}, 
+				   {val: 'eventInt', dispName: 'Interrupting'}, 
+				   {val: 'eventNonint', dispName: 'Non-Interrupting'}, 
+				   {val: 'catching', dispName: 'Catching'}, 
+				   {val: 'boundInt', dispName: 'Bound Interrupting'}, 
+				   {val: 'boundNonint', dispName: 'Bound Non-Interrupting'}, 
+				   {val: 'throwing', dispName: 'Throwing'}, 
+				   {val: 'end', dispName: 'End'}, 
+				   {val: 'none', dispName: 'None'}]
+	},
+	{name: 'background', dispName: 'Background', type: 'enum', defVal:'none',
+		enumList: [{val: 'gateway', dispName: 'Gateway'}, 
+				   {val: 'none', dispName: 'None'}]
+}];
+
 mxBpmnShape.prototype.eventTypeEnum = { 
 		START_STANDARD : 'standard', 
 		EVENT_SP_INT : 'eventInt', 
@@ -259,22 +294,27 @@ mxBpmnShape.prototype.redrawPath = function(c, x, y, w, h, layer)
 					c.translate(w * 0.12, 0);
 					w = w * 0.76;
 				}
-				else if (s === mxBpmnShape.prototype.eventEnum.GW_PARALLEL)
+				
+				var isInverse = false;
+				
+				if (s === 'star')
 				{
+					c.setFillColor(strokeColor);
 				}
-				else if (s === mxBpmnShape.prototype.eventEnum.GW_COMPLEX)
-				{
-				}
-
-				if (o === mxBpmnShape.prototype.eventTypeEnum.THROWING || o === mxBpmnShape.prototype.eventTypeEnum.END)
+				else if (o === mxBpmnShape.prototype.eventTypeEnum.THROWING || o === mxBpmnShape.prototype.eventTypeEnum.END)
 				{
 					c.setStrokeColor(fillColor);
 					c.setFillColor(strokeColor);
+					isInverse = true;
 				}
 
-				f.call(this, c, x, y, w, h, layer);
-
-				if (o === mxBpmnShape.prototype.eventTypeEnum.THROWING || o === mxBpmnShape.prototype.eventTypeEnum.END)
+				f.call(this, c, x, y, w, h, layer, isInverse);
+				
+				if (s === 'star')
+				{
+					c.setFillColor(fillColor);
+				}
+				else if (o === mxBpmnShape.prototype.eventTypeEnum.THROWING || o === mxBpmnShape.prototype.eventTypeEnum.END)
 				{
 					c.setStrokeColor(strokeColor);
 					c.setFillColor(fillColor);
@@ -422,11 +462,21 @@ mxBpmnShape.prototype.symbols = {
 		'general' : function(c, x, y, w, h)
 		{
 		},
-		'message': function(c, x, y, w, h)
+		'message': function(c, x, y, w, h, layer, isInverse)
 		{
 			c.rect(0, 0, w, h);
 			c.fillAndStroke();
 
+			var fc = mxUtils.getValue(this.style, "fillColor", "none");
+
+			if (fc === 'none')
+			{
+				if (isInverse)
+				{
+					c.setStrokeColor('#ffffff');
+				}
+			}
+			
 			c.begin();
 			c.moveTo(0, 0);
 			c.lineTo(w * 0.5, h * 0.5);
@@ -682,6 +732,28 @@ mxBpmnShape.prototype.symbols = {
 
 			c.setStrokeColor(strokeColor);
 			c.setFillColor(fillColor);
+		},
+		'star': function(c, x, y, w, h)
+		{
+			c.translate(w / 5, h / 6);
+			h *= 2 / 3;
+			w *= 3 / 5;
+			
+			c.begin();
+			c.moveTo(0, h / 4);
+			c.lineTo(w / 3, h / 4);
+			c.lineTo(w / 2, 0);
+			c.lineTo(2 * w / 3, h / 4);
+			c.lineTo(w, h / 4);
+			c.lineTo(5 * w / 6, h / 2);
+			c.lineTo(w, 3 * h / 4);
+			c.lineTo(2 * w / 3, 3 * h / 4);
+			c.lineTo(w / 2, h);
+			c.lineTo(w / 3, 3 * h / 4);
+			c.lineTo(0, 3 * h / 4);
+			c.lineTo(w / 6, h / 2);
+			c.close();
+			c.fillAndStroke();
 		}
 };
 

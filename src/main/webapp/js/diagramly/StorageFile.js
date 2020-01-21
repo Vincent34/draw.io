@@ -187,7 +187,7 @@ StorageFile.prototype.rename = function(title, success, error)
 	{
 		this.ui.getLocalData(title, mxUtils.bind(this, function(data)
 		{
-			this.ui.confirm(mxResources.get('replaceIt', [title]), mxUtils.bind(this, function()
+			var fn = mxUtils.bind(this, function()
 			{
 				this.title = title;
 				
@@ -201,7 +201,16 @@ StorageFile.prototype.rename = function(title, success, error)
 				{
 					this.ui.removeLocalData(oldTitle, success);
 				}), error);
-			}), error);
+			});
+			
+			if (data != null)
+			{
+				this.ui.confirm(mxResources.get('replaceIt', [title]), fn, error);
+			}
+			else
+			{
+				fn();
+			}
 		}));
 	}
 	else
@@ -220,6 +229,17 @@ StorageFile.prototype.open = function()
 
 	// Immediately creates the storage entry
 	this.saveFile(this.getTitle());
+};
+
+/**
+ * Adds the listener for automatically saving the diagram for local changes.
+ */
+StorageFile.prototype.getLatestVersion = function(success, error)
+{
+	this.ui.getLocalData(this.title, mxUtils.bind(this, function(data)
+	{
+		success(new StorageFile(this.ui, data, this.title));
+	}));
 };
 
 /**

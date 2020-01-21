@@ -1,6 +1,15 @@
 <shapes name="mxgraph.mscae.general">
 <shape aspect="variable" h="99.27" name="Audio" strokewidth="inherit" w="97.49">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.59" y="0"/>
+        <constraint name="S" perimeter="0" x="0.59" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.805" y="0.165"/>
+        <constraint name="NW" perimeter="0" x="0.005" y="0.295"/>
+        <constraint name="SE" perimeter="0" x="0.805" y="0.835"/>
+        <constraint name="SW" perimeter="0" x="0.005" y="0.705"/>
+    </connections>
     <foreground>
         <path>
             <move x="2.79" y="70.44"/>
@@ -36,7 +45,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.74" name="Bug" strokewidth="inherit" w="99.79">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.13"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.65"/>
+        <constraint name="E" perimeter="0" x="1" y="0.65"/>
+        <constraint name="NE" perimeter="0" x="0.76" y="0.01"/>
+        <constraint name="NW" perimeter="0" x="0.25" y="0.01"/>
+        <constraint name="SE" perimeter="0" x="0.93" y="0.97"/>
+        <constraint name="SW" perimeter="0" x="0.07" y="0.97"/>
+    </connections>
     <foreground>
         <path>
             <move x="12.79" y="96.64"/>
@@ -98,7 +116,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="46.7" name="Cable Settop TV Box" strokewidth="inherit" w="97.44">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.76" y="0"/>
+        <constraint name="NW" perimeter="0" x="0.24" y="0"/>
+        <constraint name="SE" perimeter="0" x="0.98" y="0.97"/>
+        <constraint name="SW" perimeter="0" x="0.02" y="0.97"/>
+    </connections>
     <foreground>
         <fillcolor color="#bebebe"/>
         <path>
@@ -237,7 +264,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="80.9" name="Calendar" strokewidth="inherit" w="99.6">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="1" y="0"/>
+        <constraint name="NW" perimeter="0" x="0" y="0"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="80.9"/>
@@ -365,7 +401,15 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="95.5" name="Chart" strokewidth="inherit" w="99.6">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.21"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="0.755" y="0.5"/>
+        <constraint name="NW" perimeter="0" x="0" y="0"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="95.5"/>
@@ -405,7 +449,13 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.9" name="Checkmark" strokewidth="inherit" w="91.7">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.59"/>
+        <constraint name="S" perimeter="0" x="0.41" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.78"/>
+        <constraint name="E" perimeter="0" x="0.73" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.94" y="0.04"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="78.1"/>
@@ -420,7 +470,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="101.38" name="Continuous Cycle" strokewidth="inherit" w="96.84">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.015"/>
+        <constraint name="S" perimeter="0" x="0.465" y="1"/>
+        <constraint name="W" perimeter="0" x="0.02" y="0.5"/>
+        <constraint name="E" perimeter="0" x="0.98" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.78" y="0.1"/>
+        <constraint name="NW" perimeter="0" x="0.23" y="0.1"/>
+        <constraint name="SE" perimeter="0" x="0.78" y="0.85"/>
+        <constraint name="SW" perimeter="0" x="0.23" y="0.85"/>
+    </connections>
     <foreground>
         <path>
             <move x="32.33" y="91.38"/>
@@ -455,7 +514,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="98.5" name="Crossout" strokewidth="inherit" w="78.6">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.555" y="0.425"/>
+        <constraint name="S" perimeter="0" x="0.555" y="0.575"/>
+        <constraint name="W" perimeter="0" x="0.475" y="0.5"/>
+        <constraint name="E" perimeter="0" x="0.625" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="1" y="0"/>
+        <constraint name="NW" perimeter="0" x="0" y="0.035"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="0.96"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="3.5"/>
@@ -474,7 +542,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="67.8" name="Cut and Paste" strokewidth="inherit" w="100.98">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.51" y="0.4"/>
+        <constraint name="S" perimeter="0" x="0.51" y="0.595"/>
+        <constraint name="W" perimeter="0" x="0.39" y="0.5"/>
+        <constraint name="E" perimeter="0" x="0.65" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="1" y="0.2"/>
+        <constraint name="NW" perimeter="0" x="0.07" y="0.05"/>
+        <constraint name="SE" perimeter="0" x="1" y="0.81"/>
+        <constraint name="SW" perimeter="0" x="0.07" y="0.95"/>
+    </connections>
     <foreground>
         <path>
             <move x="65.38" y="33.69"/>
@@ -520,7 +597,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="70.05" name="Game Controller" strokewidth="inherit" w="100.36">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.11"/>
+        <constraint name="S" perimeter="0" x="0.5" y="0.71"/>
+        <constraint name="W" perimeter="0" x="0.04" y="0.5"/>
+        <constraint name="E" perimeter="0" x="0.97" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.86" y="0.07"/>
+        <constraint name="NW" perimeter="0" x="0.15" y="0.07"/>
+        <constraint name="SE" perimeter="0" x="0.95" y="0.98"/>
+        <constraint name="SW" perimeter="0" x="0.05" y="0.98"/>
+    </connections>
     <foreground>
         <path>
             <move x="14.48" y="5.08"/>
@@ -584,7 +670,14 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="83.7" name="Gears" strokewidth="inherit" w="99.45">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.23" y="0"/>
+        <constraint name="S" perimeter="0" x="0.68" y="1"/>
+        <constraint name="W" perimeter="0" x="0.345" y="0.61"/>
+        <constraint name="E" perimeter="0" x="1" y="0.61"/>
+        <constraint name="NE" perimeter="0" x="0.67" y="0.22"/>
+        <constraint name="NW" perimeter="0" x="0" y="0.28"/>
+    </connections>
     <foreground>
         <path>
             <move x="5" y="37.7"/>
@@ -672,7 +765,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="97.6" name="Graph" strokewidth="inherit" w="99.6">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.33"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="1" y="0.1"/>
+        <constraint name="NW" perimeter="0" x="0" y="0"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="97.6"/>
@@ -706,7 +808,15 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="94.3" name="Like" strokewidth="inherit" w="100.07">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.33"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.7" y="0"/>
+        <constraint name="SE" perimeter="0" x="0.8" y="0.98"/>
+        <constraint name="SW" perimeter="0" x="0" y="0.95"/>
+    </connections>
     <foreground>
         <path>
             <move x="23.7" y="43.35"/>
@@ -751,7 +861,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="100" name="Not Allowed" strokewidth="inherit" w="100">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.855" y="0.145"/>
+        <constraint name="NW" perimeter="0" x="0.145" y="0.145"/>
+        <constraint name="SE" perimeter="0" x="0.855" y="0.855"/>
+        <constraint name="SW" perimeter="0" x="0.145" y="0.855"/>
+    </connections>
     <foreground>
         <path>
             <move x="50" y="100"/>
@@ -771,7 +890,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="100" name="Pointer" strokewidth="inherit" w="100">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.855" y="0.145"/>
+        <constraint name="NW" perimeter="0" x="0.145" y="0.145"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0.145" y="0.855"/>
+    </connections>
     <foreground>
         <path>
             <move x="50" y="100"/>
@@ -785,7 +913,14 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="36.2" name="Slider Bar horizontal" strokewidth="inherit" w="96.3">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.4"/>
+        <constraint name="S" perimeter="0" x="0.5" y="0.64"/>
+        <constraint name="W" perimeter="0" x="0" y="0.52"/>
+        <constraint name="E" perimeter="0" x="1" y="0.52"/>
+        <constraint name="NE" perimeter="0" x="0.865" y="0"/>
+        <constraint name="SE" perimeter="0" x="0.865" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="23"/>
@@ -806,7 +941,14 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.6" name="Slider Bar vertical" strokewidth="inherit" w="43.6">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.345" y="0"/>
+        <constraint name="S" perimeter="0" x="0.345" y="1"/>
+        <constraint name="W1" perimeter="0" x="0.245" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="1" y="0"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="10.7" y="99.6"/>
@@ -963,7 +1105,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.6" name="Tasks" strokewidth="inherit" w="75.7">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.97" y="0.145"/>
+        <constraint name="NW" perimeter="0" x="0.03" y="0.145"/>
+        <constraint name="SE" perimeter="0" x="0.98" y="0.98"/>
+        <constraint name="SW" perimeter="0" x="0.02" y="0.98"/>
+    </connections>
     <foreground>
         <path>
             <move x="65" y="13.1"/>
@@ -1009,7 +1160,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="94.7" name="Task List" strokewidth="inherit" w="75.9">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.85" y="0.13"/>
+        <constraint name="NW" perimeter="0" x="0" y="0"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="94.7"/>
@@ -1112,7 +1272,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="18.39" name="Tunnel" strokewidth="inherit" w="99.63">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.01"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.94" y="0.01"/>
+        <constraint name="NW" perimeter="0" x="0.07" y="0.01"/>
+        <constraint name="SE" perimeter="0" x="0.94" y="1"/>
+        <constraint name="SW" perimeter="0" x="0.07" y="0.99"/>
+    </connections>
     <foreground>
         <path>
             <move x="7.81" y="18.09"/>
@@ -1133,7 +1302,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.6" name="Video" strokewidth="inherit" w="97.3">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="1" y="0"/>
+        <constraint name="NW" perimeter="0" x="0" y="0"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="99.6"/>

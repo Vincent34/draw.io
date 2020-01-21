@@ -1,6 +1,15 @@
 <shapes name="mxgraph.mscae.system_center">
 <shape aspect="variable" h="72.1" name="Admin Console" strokewidth="inherit" w="99.5">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.55" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="0.88" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.79" y="0.01"/>
+        <constraint name="NW" perimeter="0" x="0.01" y="0.01"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0.18" y="0.92"/>
+    </connections>
     <foreground>
         <path>
             <move x="4" y="51.9"/>
@@ -49,7 +58,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.95" name="Central Administration Site SQL" strokewidth="inherit" w="75.57">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="0.95"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.57"/>
+        <constraint name="NE" perimeter="0" x="0.635" y="0.3"/>
+        <constraint name="NW" perimeter="0" x="0.02" y="0.02"/>
+        <constraint name="SE" perimeter="0" x="0.995" y="0.93"/>
+        <constraint name="SW" perimeter="0" x="0" y="0.925"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="92.62"/>
@@ -137,7 +155,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.6" name="Cloud Distribution Point" strokewidth="inherit" w="92.94">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.47" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="0.95" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.9" y="0.16"/>
+        <constraint name="NW" perimeter="0" x="0.02" y="0.02"/>
+        <constraint name="SE" perimeter="0" x="0.95" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="0.92"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="91.7"/>
@@ -198,7 +225,15 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.6" name="Distribution Point" strokewidth="inherit" w="88.1">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.49" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.5"/>
+        <constraint name="NW" perimeter="0" x="0.02" y="0.02"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="0.92"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="91.7"/>
@@ -242,7 +277,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.6" name="Management Point" strokewidth="inherit" w="96.8">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0.005"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.73"/>
+        <constraint name="NE" perimeter="0" x="0.53" y="0.5"/>
+        <constraint name="NW" perimeter="0" x="0.02" y="0.02"/>
+        <constraint name="SE" perimeter="0" x="1" y="1"/>
+        <constraint name="SW" perimeter="0" x="0" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="99.6"/>
@@ -312,7 +356,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.71" name="Primary Site" strokewidth="inherit" w="75">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="0.95"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.56"/>
+        <constraint name="NE" perimeter="0" x="0.63" y="0.3"/>
+        <constraint name="NW" perimeter="0" x="0.02" y="0.02"/>
+        <constraint name="SE" perimeter="0" x="1" y="0.94"/>
+        <constraint name="SW" perimeter="0" x="0" y="0.925"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="92.2"/>
@@ -361,7 +414,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.8" name="Roles" strokewidth="inherit" w="84.64">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="0.94"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="1" y="0.69"/>
+        <constraint name="NE" perimeter="0" x="0.57" y="0.3"/>
+        <constraint name="NW" perimeter="0" x="0.02" y="0.02"/>
+        <constraint name="SE" perimeter="0" x="0.86" y="0.98"/>
+        <constraint name="SW" perimeter="0" x="0" y="0.94"/>
+    </connections>
     <foreground>
         <path>
             <move x="42.8" y="79.21"/>
@@ -458,7 +520,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="99.6" name="Secondary Site" strokewidth="inherit" w="82.9">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.5" y="0"/>
+        <constraint name="S" perimeter="0" x="0.5" y="1"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E1" perimeter="0" x="0.62" y="0.5"/>
+        <constraint name="E2" perimeter="0" x="1" y="0.58"/>
+        <constraint name="NW" perimeter="0" x="0.02" y="0.02"/>
+        <constraint name="SE" perimeter="0" x="0.99" y="0.99"/>
+        <constraint name="SW" perimeter="0" x="0" y="1"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="99.2"/>
@@ -519,7 +590,16 @@
     </foreground>
 </shape>
 <shape aspect="variable" h="86.5" name="Software Update Point" strokewidth="inherit" w="99.6">
-    <connections/>
+    <connections>
+        <constraint name="N" perimeter="0" x="0.4" y="0.01"/>
+        <constraint name="S" perimeter="0" x="0.5" y="0.945"/>
+        <constraint name="W" perimeter="0" x="0" y="0.5"/>
+        <constraint name="E" perimeter="0" x="0.87" y="0.5"/>
+        <constraint name="NE" perimeter="0" x="0.6" y="0.4"/>
+        <constraint name="NW" perimeter="0" x="0.02" y="0.02"/>
+        <constraint name="SE" perimeter="0" x="0.9" y="0.94"/>
+        <constraint name="SW" perimeter="0" x="0" y="0.94"/>
+    </connections>
     <foreground>
         <path>
             <move x="0" y="81.4"/>

@@ -29,13 +29,17 @@ public class Graphic
 
 	public static abstract class GliffyAbstractShape
 	{
-		public int strokeWidth;
+		private float strokeWidth;
 
 		public String strokeColor;
 
 		public String fillColor;
 
 		public String dashStyle;
+		
+		public int getStrokeWidth() {
+			return Math.round(strokeWidth);
+		}
 	}
 
 	public static class GliffyLine extends GliffyAbstractShape
@@ -45,6 +49,8 @@ public class Graphic
 		public Integer endArrow;
 
 		public String interpolationType;
+		
+		public Integer cornerRadius;
 
 		public List<float[]> controlPath = new ArrayList<float[]>();
 	}
@@ -59,11 +65,23 @@ public class Graphic
 
 		public int state;
 
-		public int shadowX;
+		public float shadowX;
 
-		public int shadowY;
+		public float shadowY;
 
 		public float opacity;
+
+		/**
+		 * @return true if there is no_fill string found in this element
+		 */
+		public boolean isNoFill()
+		{
+			if (tid != null)
+			{
+				return tid.contains("no_fill");
+			}
+			return false;
+		}
 
 	}
 
